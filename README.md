@@ -70,8 +70,6 @@ A solução utiliza uma arquitetura de aplicação web desacoplada, composta por
 2.  **Back-end (API):** Uma **API RESTful** robusta, construída em **Java com Spring Boot**, que centraliza todas as regras de negócio e a segurança.
 3.  **Banco de Dados:** Um banco de dados relacional **PostgreSQL**, que persiste todos os dados da aplicação.
 
-![Diagrama de Entidade-Relacionamento](imagens/arquitetura.png)
-
 ---
 
 ## 💻 Tecnologias Utilizadas
@@ -80,15 +78,15 @@ Este projeto foi construído com as seguintes tecnologias:
 
 * **Back-end:**
     * Java 21 (LTS)
-    * Spring Boot 3
+    * Spring Boot 3.5.7
     * Spring Security (para autenticação JWT)
     * Spring Data JPA (Hibernate)
     * Maven
 * **Front-end:**
-    * React 18
+    * React 19.2
     * Axios (para comunicação com a API)
 * **Banco de Dados:**
-    * PostgreSQL 16
+    * PostgreSQL 18
 * **Ambiente e DevOps:**
     * Docker / Docker Compose
     * Git / GitHub
@@ -112,4 +110,49 @@ Para rodar este projeto em sua máquina local, siga os passos abaixo.
 
 **1. Clonar o Repositório**
 ```bash
-git clone [https://github.com/](https://github.com/)lucas-oliveirah17/tcc-barber-scheduler.git
+git clone https://github.com/lucas-oliveirah17/tcc-barber-scheduler.git
+```
+
+**2.Configurar Variáveis de Ambiente:**
+* Na raiz do projeto, crie um arquivo chamado `.env`.
+* Copie o conteúdo de `.env.example` (vocês devem criar este arquivo modelo) para o `.env` e preencha as variáveis:
+```bash
+DB_USER=barber_admin
+DB_PASS=sua_senha_aqui
+DB_NAME=barber_db
+```
+
+**3. Iniciar o Banco de Dados (Docker):**
+* Este comando irá baixar a imagem do PostgreSQL e iniciar o banco de dados em background.
+```bash
+docker-compose up -d
+```
+
+**4. Rodar o Back-end (Java/Spring):**
+* Abra a pasta do back-end (ex: `/backend`) no Eclipse (ou seu IDE Java).
+* Aguarde o Maven baixar as dependências.
+* Rode o projeto como uma Aplicação Spring Boot (ex: `BarberSchedulerApplication.java`).
+* O servidor estará rodando em `http://localhost:8080`.
+
+**5.Rodar o Front-end (React):** 
+* Em um terminal separado, navegue até a pasta do front-end (ex: `/frontend`):
+```bash
+cd frontend
+npm install  # Instala as dependências (só na 1ª vez)
+npm start    # Inicia a aplicação
+```
+* O app estará disponível no seu navegador em `http://localhost:3000`.
+
+---
+
+## 🎓 Autores
+- **Lucas Silva de Oliveira** - Desenvolvedor Back-end
+   - [GitHub](https://github.com/lucas-oliveirah17) | [LinkedIn](https://www.linkedin.com/in/lucas-oliveirah17/)
+
+- **Daniel Navarro Porto** - Desenvolvedor Front-end & Segurança
+   - [GitHub](https://github.com/danielnporto) | [LinkedIn](https://www.linkedin.com/in/danielnporto/)
+ 
+---
+
+## 📄 Licença
+Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
