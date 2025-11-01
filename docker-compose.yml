@@ -1,0 +1,17 @@
+services:
+  # Serviço do Banco de Dados PostgreSQL
+  db-postgres:
+    image: postgres:18-alpine  # Usa a imagem oficial do Postgres
+    container_name: barber-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}       # Lê o usuário do arquivo .env
+      POSTGRES_PASSWORD: ${DB_PASS}   # Lê a senha do arquivo .env
+      POSTGRES_DB: ${DB_NAME}         # Lê o nome do banco do arquivo .env
+    ports:
+      - "5432:5432"  # Mapeia a porta 5432 do seu PC para a porta 5432 do contêiner
+    volumes:
+      - postgres_data_volume:/var/lib/postgresql/data # Garante que os dados do banco persistam
+     
+volumes:
+    postgres_data_volume: {}
