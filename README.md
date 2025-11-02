@@ -106,7 +106,7 @@ Para rodar este projeto em sua máquina local, siga os passos abaixo.
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/) (para o banco de dados)
 * JDK 21 (Ex: [OpenJDK](https://adoptium.net/))
 * Node.js 24 (LTS) (Use o [NVM](https://github.com/nvm-sh/nvm) para gerenciar)
-* Sua IDE Java (Eclipse) e seu editor de código (VS Code)
+* IDE Java (Eclipse) e editor de código (VS Code)
 
 **1. Clonar o Repositório**
 ```bash
@@ -114,13 +114,26 @@ git clone https://github.com/lucas-oliveirah17/tcc-barber-scheduler.git
 ```
 
 **2.Configurar Variáveis de Ambiente:**
+**a. Para o Docker (Banco de Dados):**
 * Na raiz do projeto, crie um arquivo chamado `.env`.
-* Copie o conteúdo de `.env.example` (vocês devem criar este arquivo modelo) para o `.env` e preencha as variáveis:
+* Copie o conteúdo de `.env.example` para o `.env` e define a senha:
 ```bash
 DB_USER=barber_admin
 DB_PASS=sua_senha_aqui
 DB_NAME=barber_db
 ```
+
+**b. Para o Spring Boot (Aplicação Java):**
+* Navegue até a pasta `backend/src/main/resources/`.
+* Crie um novo arquivo chamado `application-local.properties`.
+* Cole o seguinte conteúdo e define a senha para a **mesma** definida no `.ev`:
+```bash
+# Credenciais para Conexao com o Banco de Dados (Docker)
+spring.datasource.url=jdbc:postgresql://localhost:5432/barber_db
+spring.datasource.username=barber_admin
+spring.datasource.password=sua_senha_aqui
+```
+
 
 **3. Iniciar o Banco de Dados (Docker):**
 * Este comando irá baixar a imagem do PostgreSQL e iniciar o banco de dados em background.
@@ -129,9 +142,10 @@ docker-compose up -d
 ```
 
 **4. Rodar o Back-end (Java/Spring):**
-* Abra a pasta do back-end (ex: `/backend`) no Eclipse (ou seu IDE Java).
+* Abra a pasta do back-end (ex: `/backend`) no Eclipse IDE.
 * Aguarde o Maven baixar as dependências.
-* Rode o projeto como uma Aplicação Spring Boot (ex: `BarberSchedulerApplication.java`).
+* Encontre a classe principal `BarberSchedulerApplication.java`.
+* Clique com o botão direito no arquivo e selecione **`Run As...` -> `1 Java Application`**.
 * O servidor estará rodando em `http://localhost:8080`.
 
 **5.Rodar o Front-end (React):** 
