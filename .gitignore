@@ -5,8 +5,7 @@
 /.env.development
 
 # Ignora arquivos de propriedades locais do Spring (que podem conter senhas)
-/application-local.properties
-/src/main/resources/application-local.properties
+/backend/src/main/resources/application-local.properties
 
 # --- Java / Maven / Spring Boot ---
 # Ignora a pasta de saída do build do Maven
