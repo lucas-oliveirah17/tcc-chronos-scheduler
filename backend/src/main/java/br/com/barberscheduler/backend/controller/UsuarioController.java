@@ -42,7 +42,9 @@ public class UsuarioController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, Usuario usuarioAtualizado) {
+    public ResponseEntity<Usuario> atualizarUsuario(
+            @PathVariable Long id, 
+            @RequestBody Usuario usuarioAtualizado) {
         try {
             Usuario usuario = usuarioService.atualizarUsuario(id, usuarioAtualizado);
             return ResponseEntity.ok(usuario);

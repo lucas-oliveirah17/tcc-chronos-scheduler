@@ -34,7 +34,7 @@ public class UsuarioService {
     
     public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) {
         Usuario usuarioExistente = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario de " + id + " não encontrado."));
+                .orElseThrow(() -> new RuntimeException("Usuario de id " + id + " não encontrado."));
         
         usuarioExistente.setNome(usuarioAtualizado.getNome());
         usuarioExistente.setEmail(usuarioAtualizado.getEmail());
@@ -45,7 +45,7 @@ public class UsuarioService {
     
     public void deletarUsuario(Long id) {
         if(!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario de " + id + " não encontrado.");
+            throw new RuntimeException("Usuario de id " + id + " não encontrado.");
         }
         usuarioRepository.deleteById(id);
     }
