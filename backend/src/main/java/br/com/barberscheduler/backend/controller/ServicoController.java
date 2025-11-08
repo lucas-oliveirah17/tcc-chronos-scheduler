@@ -19,7 +19,7 @@ import br.com.barberscheduler.backend.service.ServicoService;
 @RestController
 @RequestMapping("/api/servicos")
 public class ServicoController {
-    private ServicoService servicoService;
+    private final ServicoService servicoService;
     
     public ServicoController(ServicoService servicoService) {
         this.servicoService = servicoService;
