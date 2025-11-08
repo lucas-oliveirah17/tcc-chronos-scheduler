@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 public class Servico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     
     @Column(nullable = false, length = 100)
     private String nome;
@@ -31,11 +31,11 @@ public class Servico {
     public Servico() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

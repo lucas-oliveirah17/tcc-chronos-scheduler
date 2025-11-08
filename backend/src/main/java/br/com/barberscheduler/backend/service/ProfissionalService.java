@@ -66,7 +66,7 @@ public class ProfissionalService {
     public Profissional atualizar(Long id, Profissional profissionalAtualizado) {
         Profissional profissionalExistente = profissionalRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Serviço de ID " + id + " não encontrado."));
+                        "Profissional de ID " + id + " não encontrado."));
         
         profissionalExistente.setEspecialidades(profissionalAtualizado.getEspecialidades());
         
