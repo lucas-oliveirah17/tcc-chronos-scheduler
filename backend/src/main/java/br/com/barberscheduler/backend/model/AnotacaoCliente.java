@@ -32,7 +32,7 @@ public class AnotacaoCliente {
     private Usuario cliente;
     
     @Lob
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 500, columnDefinition = "TEXT")
     private String anotacao;
     
     @CreationTimestamp

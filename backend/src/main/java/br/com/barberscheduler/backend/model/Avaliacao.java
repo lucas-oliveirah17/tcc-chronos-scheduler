@@ -36,7 +36,7 @@ public class Avaliacao {
     private Integer nota;
     
     @Lob
-    @Column(nullable = true, length = 500)
+    @Column(nullable = true, length = 500, columnDefinition = "TEXT")
     private String comentario;
     
     @CreationTimestamp
