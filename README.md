@@ -79,18 +79,21 @@ Este projeto foi construído com as seguintes tecnologias:
 * **Back-end:**
     * Java 21 (LTS)
     * Spring Boot 3.5.7
-    * Spring Security (para autenticação JWT)
-    * Spring Data JPA (Hibernate)
+	* Spring Data JPA (Hibernate)
+    * Spring Security
+	* Java JWT (da AuthO) - Geração de tokens
     * Maven
 * **Front-end:**
-    * React 19.2
-    * Axios (para comunicação com a API)
+    * React.js 19.2
+	* Vite (com SWC) - Servidor de desenvolvimento e build tool
+	* React Router DOM - Gerenciamento de rotas e páginas
+    * Axios - Comunicação com a API RESTful
 * **Banco de Dados:**
     * PostgreSQL 18
 * **Ambiente e DevOps:**
     * Docker / Docker Compose
     * Git / GitHub
-    * Postman (para testes de API)
+    * Postman - Testes de API
 * **IDEs:**
     * Eclipse IDE
       * Plugin: editorconfig-eclipse 0.x
@@ -101,25 +104,26 @@ Este projeto foi construído com as seguintes tecnologias:
 
 ## 🚀 Como Executar o Projeto (Ambiente Local)
 
-Para rodar este projeto em sua máquina local, siga os passos abaixo.
+Para rodar este projeto em sua máquina local, siga os passos abaixo. O projeto é divido em `backend` (a API em Java/Spring) e `frontend` (a aplicação em React/Vite);
 
 **Pré-requisitos:**
 * [Git](https://git-scm.com/)
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/) (para o banco de dados)
-* JDK 21 (Ex: [OpenJDK](https://adoptium.net/))
-* Node.js 24 (LTS) (Use o [NVM](https://github.com/nvm-sh/nvm) para gerenciar)
-* IDE Java (Eclipse) e editor de código (VS Code)
+* [JDK 21 (OpenJDK)] (https://adoptium.net/))
+* [Node.js 24 (LTS)](https://nodejs.org/en/blog/release/v24.11.0) (Use o [NVM](https://github.com/nvm-sh/nvm) para gerenciar)
+* IDE Java ([Eclipse](https://www.eclipse.org/downloads/packages/release/2025-09/r/eclipse-ide-java-developers)) e editor de código ([VS Code](https://code.visualstudio.com/download))
 
 **1. Clonar o Repositório**
 ```bash
 git clone https://github.com/lucas-oliveirah17/tcc-barber-scheduler.git
+cd tcc-barber-scheduler
 ```
 
 **2.Configurar Variáveis de Ambiente:**
 
 **a. Para o Docker (Banco de Dados):**
-* Na raiz do projeto, crie um arquivo chamado `.env`.
-* Copie o conteúdo de `.env.example` para o `.env` e define a senha:
+* Na raiz do projeto (`tcc-barber-scheduler`), crie um arquivo chamado `.env`.
+* Copie o conteúdo de `.env.example` para o `.env` e define sua senha:
 ```bash
 DB_USER=barber_admin
 DB_PASS=sua_senha_aqui
@@ -129,7 +133,7 @@ DB_NAME=barber_db
 **b. Para o Spring Boot (Aplicação Java):**
 * Navegue até a pasta `backend/src/main/resources/`.
 * Crie um novo arquivo chamado `application-local.properties`.
-* Cole o seguinte conteúdo e define a senha para a **mesma** definida no `.ev`:
+* Cole o seguinte conteúdo e use a **mesma senha** definida no `.env`:
 ```bash
 # Credenciais para Conexao com o Banco de Dados (Docker)
 spring.datasource.url=jdbc:postgresql://localhost:5432/barber_db
@@ -139,27 +143,30 @@ spring.datasource.password=sua_senha_aqui
 
 
 **3. Iniciar o Banco de Dados (Docker):**
-* Este comando irá baixar a imagem do PostgreSQL e iniciar o banco de dados em background.
+* No terminal, na raiz do projeto, suba o contêiner do PostgreSQL. 
 ```bash
 docker-compose up -d
 ```
+* O Docker irá baixar a imagem do PostgreSQL e iniciar o banco de dados em background.
 
 **4. Rodar o Back-end (Java/Spring):**
-* Abra a pasta do back-end (ex: `/backend`) no Eclipse IDE.
-* Aguarde o Maven baixar as dependências.
-* Encontre a classe principal `BarberSchedulerApplication.java`.
-* Clique com o botão direito no arquivo e selecione **`Run As...` -> `1 Java Application`**.
+* Abra a pasta `backend` no Eclipse IDE como projeto Maven.
+* Aguarde o Maven baixar as dependências do `pom.xml`.
+* Encontre a classe principal de inicizalização `BarberSchedulerApplication.java`.
+* Execute este arquivo como uma Aplicação Java.
 * O servidor estará rodando em `http://localhost:8080`.
 
 **5.Rodar o Front-end (React):** 
-* Em um terminal separado, navegue até a pasta do front-end (ex: `/frontend`):
+* Em um terminal separado, navegue até a pasta `frontend`
+* Instale as dependências (apenas na primeira vez):
 ```bash
-cd frontend
-npm install  # Instala as dependências (só na 1ª vez)
-npm start    # Inicia a aplicação
+npm install
 ```
-* O app estará disponível no seu navegador em `http://localhost:3000`.
-
+* Inicie o servidor de desenvolvimento do Vite:
+```bash
+npm run dev
+```
+* O terminal mostrará que a aplicação estará rodando. App estará disponível no navegador `http://localhost:5173`.
 ---
 
 ## 🎓 Autores
