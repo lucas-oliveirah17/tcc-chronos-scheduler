@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import br.com.barberscheduler.backend.dto.ProfissionalDTO;
 import br.com.barberscheduler.backend.dto.ProfissionalRequestDTO;
-import br.com.barberscheduler.backend.dto.UsuarioDTO;
 import br.com.barberscheduler.backend.model.Profissional;
 import br.com.barberscheduler.backend.model.Usuario;
 import br.com.barberscheduler.backend.model.enums.PerfilUsuario;
@@ -28,26 +27,6 @@ public class ProfissionalService {
         this.usuarioService = usuarioService;
     }
     
-    private ProfissionalDTO converterParaDTO(Profissional profissional) {
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        Usuario usuario = profissional.getUsuario();
-        
-        usuarioDTO.setId(usuario.getId());
-        usuarioDTO.setNome(usuario.getNome());
-        usuarioDTO.setEmail(usuario.getEmail());
-        usuarioDTO.setTelefone(usuario.getTelefone());
-        usuarioDTO.setPerfil(usuario.getPerfil());
-        usuarioDTO.setCriadoEm(usuario.getCriadoEm());
-        
-        ProfissionalDTO dto = new ProfissionalDTO();
-        
-        dto.setId(profissional.getId());
-        dto.setEspecialidades(profissional.getEspecialidades());
-        dto.setUsuario(usuarioDTO);
-        
-        return dto;
-    }
-    
     @Transactional(readOnly = true)
     public Profissional findEntidadeById(Long id) {
         return profissionalRepository.findById(id)
@@ -62,7 +41,7 @@ public class ProfissionalService {
     public List<ProfissionalDTO> listarTodos() {      
         return profissionalRepository.findAll()
                 .stream()
-                .map(this::converterParaDTO)
+                .map(ProfissionalDTO::new)
                 .collect(Collectors.toList());
     }
     
@@ -72,14 +51,14 @@ public class ProfissionalService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Profissional de ID " + id + " não encontrado ou inativo."));
         
-        return converterParaDTO(profissional);
+        return new ProfissionalDTO(profissional);
     }
     
     @Transactional
     public ProfissionalDTO criar(ProfissionalRequestDTO dto) {
         if(dto.getUsuarioId() == null) {
             throw new IllegalArgumentException(
-                    "O ID do usuário é obrigatório para criar um profissional");
+                    "O ID do usuário é obrigatório para criar um profissional.");
         }
         
         Usuario usuarioAssociado = usuarioService.findEntidadeById(dto.getUsuarioId());
@@ -100,7 +79,7 @@ public class ProfissionalService {
         
         Profissional profissionalSalvo = profissionalRepository.save(novoProfissional);
         
-        return converterParaDTO(profissionalSalvo);
+        return new ProfissionalDTO(profissionalSalvo);
     }
     
     @Transactional
@@ -133,7 +112,7 @@ public class ProfissionalService {
         
         Profissional profissionalAtualizado = profissionalRepository.save(profissionalExistente);
         
-        return converterParaDTO(profissionalAtualizado);
+        return new ProfissionalDTO(profissionalAtualizado);
     }
     
     @Transactional

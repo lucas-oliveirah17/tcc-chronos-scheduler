@@ -1,6 +1,6 @@
 package br.com.barberscheduler.backend.dto;
 
-//DTO para RECEBER dados ao criar ou atualizar um Profissional
+// DTO para RECEBER dados ao criar ou atualizar um Profissional
 public class ProfissionalRequestDTO {
     
     private String especialidades;

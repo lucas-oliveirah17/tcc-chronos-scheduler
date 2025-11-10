@@ -2,7 +2,9 @@ package br.com.barberscheduler.backend.dto;
 
 import java.math.BigDecimal;
 
-//DTO para RETORNAR dados de Servico ao frontend
+import br.com.barberscheduler.backend.model.Servico;
+
+// DTO para RETORNAR dados de Servico ao frontend
 public class ServicoDTO {
     
     private Long id;
@@ -11,7 +13,15 @@ public class ServicoDTO {
     private Integer duracaoMinutos;
     private BigDecimal preco;
     
-    public ServicoDTO() {        
+    public ServicoDTO() {
+    }
+    
+    public ServicoDTO(Servico servico) {
+        this.id = servico.getId();
+        this.nome = servico.getNome();
+        this.descricao = servico.getDescricao();
+        this.duracaoMinutos = servico.getDuracaoMinutos();
+        this.preco = servico.getPreco();
     }
     
     public Long getId() {

@@ -1,10 +1,11 @@
 package br.com.barberscheduler.backend.dto;
 
+import br.com.barberscheduler.backend.model.Usuario;
 import br.com.barberscheduler.backend.model.enums.PerfilUsuario;
 
 import java.time.LocalDateTime;
 
-//DTO para RETORNAR dados de Usuario ao frontend
+// DTO para RETORNAR dados de Usuario ao frontend
 public class UsuarioDTO {
     
     private Long id;
@@ -15,6 +16,15 @@ public class UsuarioDTO {
     private LocalDateTime criadoEm;
     
     public UsuarioDTO() {
+    }
+    
+    public UsuarioDTO(Usuario usuario) {
+        this.id = usuario.getId();
+        this.nome = usuario.getNome();
+        this.email = usuario.getEmail();
+        this.telefone = usuario.getTelefone();
+        this.perfil = usuario.getPerfil();
+        this.criadoEm = usuario.getCriadoEm();
     }
     
     public Long getId() {

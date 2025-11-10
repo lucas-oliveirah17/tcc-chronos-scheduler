@@ -14,13 +14,25 @@ import br.com.barberscheduler.backend.model.enums.PerfilUsuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     
+    /**
+     * Encontra um usuário (ativo) pelo email.
+    */
     Optional<Usuario> findByEmail(String email);
     
+    /**
+     * Lista todos os usuários (ativo) de um determinado perfil.
+    */
     List<Usuario> findAllByPerfil(PerfilUsuario perfil);
     
+    /**
+     * Encontra um usuário (ativo ou não) pelo email.
+    */
     @Query(value = "SELECT * FROM usuarios WHERE email = :email LIMIT 1", nativeQuery = true)
     Optional<Usuario> findByEmailRegardlessOfStatus(@Param("email") String email);
     
+    /**
+     * Verifica se um usuário existe ou não pelo email (ativo ou não).
+    */
     @Query(value = "SELECT COUNT(1) > 0 FROM usuarios WHERE email = :email", nativeQuery = true)
     boolean existsByEmailRegardlessOfStatus(@Param("email") String email);
 }

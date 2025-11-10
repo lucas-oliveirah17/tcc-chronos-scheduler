@@ -2,7 +2,7 @@ package br.com.barberscheduler.backend.dto;
 
 import java.math.BigDecimal;
 
-//DTO para RECEBER dados ao criar ou atualizar um Servico
+// DTO para RECEBER dados ao criar ou atualizar um Servico
 public class ServicoRequestDTO {
     
     private String nome;

@@ -22,18 +22,6 @@ public class ServicoService {
         this.servicoRepository = servicoRepository;
     }
     
-    private ServicoDTO converterParaDTO(Servico servico) {
-        ServicoDTO dto = new ServicoDTO();
-        
-        dto.setId(servico.getId());
-        dto.setNome(servico.getNome());
-        dto.setDescricao(servico.getDescricao());
-        dto.setDuracaoMinutos(servico.getDuracaoMinutos());
-        dto.setPreco(servico.getPreco());
-        
-        return dto;
-    }
-    
     @Transactional(readOnly = true)
     public Servico findEntidadeById(Long id) {
         return servicoRepository.findById(id)
@@ -45,7 +33,7 @@ public class ServicoService {
     public List<ServicoDTO> listarTodos() {
         return servicoRepository.findAll()
                 .stream()
-                .map(this::converterParaDTO)
+                .map(ServicoDTO::new)
                 .collect(Collectors.toList());
     }
     
@@ -55,7 +43,7 @@ public class ServicoService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Serviço de ID " + id + " não encontrado ou inativo."));
         
-        return converterParaDTO(servico);
+        return new ServicoDTO(servico);
     }
     
     @Transactional
@@ -73,7 +61,7 @@ public class ServicoService {
         
         Servico servicoSalvo = servicoRepository.save(novoServico);
         
-        return converterParaDTO(servicoSalvo);
+        return new ServicoDTO(servicoSalvo);
     }
     
     @Transactional
@@ -106,7 +94,7 @@ public class ServicoService {
         
         Servico servicoAtualizado = servicoRepository.save(servicoExistente);
         
-        return converterParaDTO(servicoAtualizado);
+        return new ServicoDTO(servicoAtualizado);
     }
     
     @Transactional

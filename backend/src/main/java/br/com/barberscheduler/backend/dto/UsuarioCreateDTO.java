@@ -2,7 +2,7 @@ package br.com.barberscheduler.backend.dto;
 
 import br.com.barberscheduler.backend.model.enums.PerfilUsuario;
 
-//DTO para RECEBER dados ao criar um novo Usuario
+// DTO para RECEBER dados ao criar um novo Usuario
 public class UsuarioCreateDTO {
     
     private String nome;

@@ -27,19 +27,6 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
     
-    private UsuarioDTO converterParaDTO(Usuario usuario) {
-        UsuarioDTO dto = new UsuarioDTO();
-        
-        dto.setId(usuario.getId());
-        dto.setNome(usuario.getNome());
-        dto.setEmail(usuario.getEmail());
-        dto.setTelefone(usuario.getTelefone());
-        dto.setPerfil(usuario.getPerfil());
-        dto.setCriadoEm(usuario.getCriadoEm());
-        
-        return dto;
-    }
-    
     @Transactional(readOnly = true)
     public Usuario findEntidadeById(Long id) {
         return usuarioRepository.findById(id)
@@ -51,7 +38,7 @@ public class UsuarioService {
     public List<UsuarioDTO> listarTodos() {
         return usuarioRepository.findAll()
                 .stream()
-                .map(this::converterParaDTO)
+                .map(UsuarioDTO::new)
                 .collect(Collectors.toList());
     }
     
@@ -61,7 +48,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Usuário de ID " + id + " não encontrado ou inativo."));
         
-        return converterParaDTO(usuario);
+        return new UsuarioDTO(usuario);
     }
     
     @Transactional
@@ -82,7 +69,7 @@ public class UsuarioService {
         
         Usuario usuarioSalvo = usuarioRepository.save(novoUsuario);
         
-        return converterParaDTO(usuarioSalvo);
+        return new UsuarioDTO(usuarioSalvo);
     }
     
     @Transactional
@@ -111,7 +98,7 @@ public class UsuarioService {
         
         Usuario usuarioAtualizado = usuarioRepository.save(usuarioExistente);
         
-        return converterParaDTO(usuarioAtualizado);
+        return new UsuarioDTO(usuarioAtualizado);
     }
     
     @Transactional

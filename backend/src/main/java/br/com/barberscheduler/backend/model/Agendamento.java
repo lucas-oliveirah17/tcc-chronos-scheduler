@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import br.com.barberscheduler.backend.model.enums.StatusAgendamento;
 
@@ -22,7 +23,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "agendamentos")
-@SQLDelete(sql = "UPDATE usuarios SET ativo = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE agendamentos SET ativo = false WHERE id = ?")
 @SQLRestriction("ativo = true")
 public class Agendamento {
     
@@ -55,6 +56,10 @@ public class Agendamento {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime criadoEm;
+    
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime atualizadoEm;
      
     @Column(nullable = false)
     private boolean ativo = true;
@@ -124,6 +129,14 @@ public class Agendamento {
 
     public void setCriadoEm(LocalDateTime criadoEm) {
         this.criadoEm = criadoEm;
+    }
+    
+    public LocalDateTime getAtualizadoEm() {
+        return atualizadoEm;
+    }
+
+    public void setAtualizadoEm(LocalDateTime atualizadoEm) {
+        this.atualizadoEm = atualizadoEm;
     }
 
     public boolean isAtivo() {

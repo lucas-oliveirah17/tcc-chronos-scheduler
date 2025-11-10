@@ -1,13 +1,21 @@
 package br.com.barberscheduler.backend.dto;
 
-//DTO para RETORNAR dados de Profissional ao frontend
+import br.com.barberscheduler.backend.model.Profissional;
+
+// DTO para RETORNAR dados de Profissional ao frontend
 public class ProfissionalDTO {
     
     private Long id;
     private String especialidades;
     private UsuarioDTO usuario;
     
-    public ProfissionalDTO() {        
+    public ProfissionalDTO() {
+    }
+    
+    public ProfissionalDTO(Profissional profissional) {
+        this.id = profissional.getId();
+        this.especialidades = profissional.getEspecialidades();
+        this.usuario = new UsuarioDTO(profissional.getUsuario());
     }
 
     public Long getId() {

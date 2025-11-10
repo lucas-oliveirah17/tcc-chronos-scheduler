@@ -6,19 +6,20 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import br.com.barberscheduler.backend.model.Agendamento;
+import br.com.barberscheduler.backend.dto.AgendamentoDTO;
+import br.com.barberscheduler.backend.dto.AgendamentoRequestDTO;
 import br.com.barberscheduler.backend.service.AgendamentoService;
 
 @RestController
 @RequestMapping("/api/agendamentos")
 public class AgendamentoController {
+    
     private final AgendamentoService agendamentoService;
     
     public AgendamentoController (AgendamentoService agendamentoService) {
@@ -26,33 +27,25 @@ public class AgendamentoController {
     }
     
     @PostMapping
-    public ResponseEntity<Agendamento> criar(
-            @RequestBody Agendamento agendamento) {
-        Agendamento novoAgendamento = agendamentoService.criar(agendamento);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoAgendamento);
+    public ResponseEntity<AgendamentoDTO> criar(
+            @RequestBody AgendamentoRequestDTO dto) {
+        AgendamentoDTO agendamentoCriado = agendamentoService.criar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(agendamentoCriado);
     }
     
     @GetMapping
-    public ResponseEntity<List<Agendamento>> listarTodos() {
-        List<Agendamento> agendamentos = agendamentoService.listarTodos();
+    public ResponseEntity<List<AgendamentoDTO>> listarTodos() {
+        List<AgendamentoDTO> agendamentos = agendamentoService.listarTodos();
         return ResponseEntity.ok(agendamentos);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Agendamento> buscarPorId(
+    public ResponseEntity<AgendamentoDTO> buscarPorId(
             @PathVariable Long id) {
-        Agendamento agendamentoEncontrado = agendamentoService.buscarPorId(id);
-        return ResponseEntity.ok(agendamentoEncontrado);
+        AgendamentoDTO agendamento = agendamentoService.buscarPorId(id);
+        return ResponseEntity.ok(agendamento);
     }
-    
-    @PutMapping("/{id}")
-    public ResponseEntity<Agendamento> atualizar(
-            @PathVariable Long id,
-            @RequestBody Agendamento agendamento) {
-        Agendamento agendamentoAtualizado = agendamentoService.atualizar(id, agendamento);
-        return ResponseEntity.ok(agendamentoAtualizado);
-    }
-    
+        
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(
             @PathVariable Long id) {

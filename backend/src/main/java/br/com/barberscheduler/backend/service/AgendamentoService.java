@@ -3,20 +3,25 @@ package br.com.barberscheduler.backend.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
+import br.com.barberscheduler.backend.dto.AgendamentoDTO;
+import br.com.barberscheduler.backend.dto.AgendamentoRequestDTO;
 import br.com.barberscheduler.backend.model.Agendamento;
 import br.com.barberscheduler.backend.model.Profissional;
 import br.com.barberscheduler.backend.model.Servico;
 import br.com.barberscheduler.backend.model.Usuario;
 import br.com.barberscheduler.backend.model.enums.PerfilUsuario;
+import br.com.barberscheduler.backend.model.enums.StatusAgendamento;
 import br.com.barberscheduler.backend.repository.AgendamentoRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class AgendamentoService {
+    
     private final AgendamentoRepository agendamentoRepository;
     private final UsuarioService usuarioService;
     private final ProfissionalService profissionalService;
@@ -32,77 +37,64 @@ public class AgendamentoService {
         this.profissionalService = profissionalService;
         this.servicoService = servicoService;
     }
-    
+        
     @Transactional(readOnly = true)
-    public List<Agendamento> listarTodos() {
-        return agendamentoRepository.findAllWithDetails();
+    public List<AgendamentoDTO> listarTodos() {
+        return agendamentoRepository.findAll()
+                .stream()
+                .map(AgendamentoDTO::new)
+                .collect(Collectors.toList());
     }
     
     @Transactional(readOnly = true)
-    public Agendamento buscarPorId(Long id) {
-        Optional<Agendamento> agendamento = agendamentoRepository.findByIdWithDetails(id);
-        return agendamento.orElseThrow(
-                () -> new EntityNotFoundException(
-                        "Agendamento de ID " + id + " não encontrado."));
+    public AgendamentoDTO buscarPorId(Long id) {
+        Agendamento agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Agendamento de ID " + id + " não encontrado ou inativo."));
+        
+        return new AgendamentoDTO(agendamento);
     }
     
     @Transactional
-    public Agendamento criar(Agendamento agendamento) {
-        Usuario cliente = usuarioService.buscarPorId(agendamento.getCliente().getId());
-        Profissional profissional = profissionalService.buscarPorId(agendamento.getProfissional().getId());
-        Servico servico = servicoService.buscarPorId(agendamento.getServico().getId());
+    public AgendamentoDTO criar(AgendamentoRequestDTO dto) {
+        Usuario cliente = usuarioService.findEntidadeById(dto.getClienteId());
+        Profissional profissional = profissionalService.findEntidadeById(dto.getProfissionalId());
+        Servico servico = servicoService.findEntidadeById(dto.getServicoId());
         
-        if(cliente == null ||
-                cliente.getId() == null) {
-            throw new IllegalArgumentException(
-                    "O ID do cliente é obrigatório para criar um agendamento.");
-        }
-        
-        if(profissional == null ||
-                profissional.getId() == null) {
-            throw new IllegalArgumentException(
-                    "O ID do profissional é obrigatório para criar um agendamento.");
-        }
-        
-        if(servico == null ||
-                servico.getId() == null) {
-            throw new IllegalArgumentException(
-                    "O ID do servico é obrigatório para criar um agendamento.");
-        }
-                
         if(cliente.getPerfil() != PerfilUsuario.CLIENTE) {
             throw new IllegalArgumentException(
-                    "O usuário de ID " + cliente.getId() + " não tem perfil de cliente.");
+                    "O usuário de ID " + cliente.getId() + " não tem perfil de Cliente.");
         }
         
-        agendamento.setCliente(cliente);
-        agendamento.setProfissional(profissional);
-        agendamento.setServico(servico);
+        LocalDateTime inicio = dto.getDataHoraInicio();
+        LocalDateTime fim = inicio.plusMinutes(servico.getDuracaoMinutos());
         
-        return agendamentoRepository.save(agendamento);
-    }
-    
-    @Transactional
-    public Agendamento atualizar(Long id, Agendamento agendamentoAtualizado) {
-        Agendamento agendamentoExistente = agendamentoRepository.findByIdWithDetails(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Agendamento de ID " + id + " não encontrado."));
+        List<Agendamento> conflitos = agendamentoRepository.findOverlappingAppointments(
+                profissional.getId(), inicio, fim);
         
-        agendamentoExistente.setDataHoraInicio(agendamentoAtualizado.getDataHoraInicio());
-        agendamentoExistente.setDataHoraFim(agendamentoAtualizado.getDataHoraFim());
-        agendamentoExistente.setStatus(agendamentoAtualizado.getStatus());
-        agendamentoExistente.setCliente(agendamentoAtualizado.getCliente());
-        agendamentoExistente.setProfissional(agendamentoAtualizado.getProfissional());
-        agendamentoExistente.setServico(agendamentoAtualizado.getServico());
+        if(!conflitos.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "O Profissional já possui um agendamento conflitanto neste horário.");
+        }
         
-        return agendamentoRepository.save(agendamentoExistente);
+        Agendamento novoAgendamento = new Agendamento();
+        novoAgendamento.setCliente(cliente);
+        novoAgendamento.setProfissional(profissional);
+        novoAgendamento.setServico(servico);
+        novoAgendamento.setDataHoraInicio(inicio);
+        novoAgendamento.setDataHoraFim(fim);
+        novoAgendamento.setStatus(StatusAgendamento.CONFIRMADO);
+        
+        Agendamento agendamentoSalvo = agendamentoRepository.save(novoAgendamento);
+        
+        return new AgendamentoDTO(agendamentoSalvo);
     }
     
     @Transactional
     public void deletar(Long id) {
         if(!agendamentoRepository.existsById(id)) {
             throw new EntityNotFoundException(
-                    "Agendamento de ID " + id + " não encontrado.");
+                    "Agendamento de ID " + id + " não encontrado ou inativo.");
         }
         agendamentoRepository.deleteById(id);
     }
