@@ -1,19 +1,13 @@
-import { AppRoutes } from './routes/AppRoutes'
+import { AppRoutes } from './routes/AppRoutes';
+import { Navbar } from './components/Navbar';
+import './App.css';
 
 function App() {
   return(
-    <div>
-      <header>
-        <h1>Chronos: Sistema de Agendamento</h1>
-        {/*Links de Navegação*/}
-        <nav>
-          <a href="/">Home</a> | <a href="/login">Login</a>
-        </nav>
-      </header>
-      <hr />
+    <div className="app-container">
+      <Navbar />
 
-      <main>
-        {/*Onde as páginas (Home, Login) são renderizadas*/}
+      <main className="main-content">
         <AppRoutes />
       </main>
     </div>

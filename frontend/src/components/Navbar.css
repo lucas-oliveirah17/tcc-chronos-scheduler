@@ -1,0 +1,57 @@
+/* Style the navigation bar */
+.navbar {
+  display: flex;
+  background-color: #555;
+  justify-content: space-between;
+  align-items: center;
+  
+  padding: 0 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.navbar-left,
+.navbar-right {
+  display: flex;
+}
+
+/* Navbar links */
+.navbar a {
+  display: block;
+  text-align: center;
+  padding: 14px 16px;
+  color: white;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Navbar links on mouse-over */
+.navbar a:hover {
+  background-color: #000;
+}
+
+/* Current/active navbar link */
+.active {
+  background-color: #04AA6D;
+}
+
+/* Add responsiveness - will automatically display the navbar vertically instead of horizontally on screens less than 500 pixels */
+@media screen and (max-width: 500px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+  }
+
+  .navbar-left,
+  .navbar-right {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .navbar a {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
