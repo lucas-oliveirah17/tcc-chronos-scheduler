@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "profissionais")
-@SQLDelete(sql = "UPDATE usuarios SET ativo = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE profissionais SET ativo = false WHERE id = ?")
 @SQLRestriction("ativo = true")
 public class Profissional {
     
