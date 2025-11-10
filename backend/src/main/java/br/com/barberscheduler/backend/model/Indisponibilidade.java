@@ -15,9 +15,14 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "indisponibilidades")
 public class Indisponibilidade {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profissional_id", nullable = false)
+    private Profissional profissional;
     
     @Column(nullable = false)
     private LocalDateTime dataHoraInicio;
@@ -28,10 +33,6 @@ public class Indisponibilidade {
     @Column(length = 255)
     private String motivo;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profissional_id", nullable = false)
-    private Profissional profissional;
-    
     public Indisponibilidade() {
     }
 
@@ -41,6 +42,14 @@ public class Indisponibilidade {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Profissional getProfissional() {
+        return profissional;
+    }
+
+    public void setProfissional(Profissional profissional) {
+        this.profissional = profissional;
     }
 
     public LocalDateTime getDataHoraInicio() {
@@ -55,7 +64,7 @@ public class Indisponibilidade {
         return dataHoraFim;
     }
 
-    public void setDateHoraFim(LocalDateTime dataHoraFim) {
+    public void setDataHoraFim(LocalDateTime dataHoraFim) {
         this.dataHoraFim = dataHoraFim;
     }
 
@@ -65,13 +74,5 @@ public class Indisponibilidade {
 
     public void setMotivo(String motivo) {
         this.motivo = motivo;
-    }
-
-    public Profissional getProfissional() {
-        return profissional;
-    }
-
-    public void setProfissional(Profissional profissional) {
-        this.profissional = profissional;
     }
 }

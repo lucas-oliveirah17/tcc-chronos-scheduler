@@ -2,9 +2,10 @@ package br.com.barberscheduler.backend.model.enums;
 
 public enum StatusAgendamento {
     CONFIRMADO,
-    CANCELADO_PELO_CLIENTE,
-    CANCELADO_PELO_BARBEIRO,
-    CANCELADO_PELO_ADMIN,
+    PENDENTE,
     CONCLUIDO,
+    CANCELADO_PELO_CLIENTE,
+    CANCELADO_PELO_PROFISSIONAL,
+    CANCELADO_PELO_ADMINISTRADOR,
     NAO_COMPARECEU
 }

@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import br.com.barberscheduler.backend.model.Servico;
+import br.com.barberscheduler.backend.dto.ServicoDTO;
+import br.com.barberscheduler.backend.dto.ServicoRequestDTO;
 import br.com.barberscheduler.backend.service.ServicoService;
 
 @RestController
 @RequestMapping("/api/servicos")
 public class ServicoController {
+    
     private final ServicoService servicoService;
     
     public ServicoController(ServicoService servicoService) {
@@ -26,37 +28,42 @@ public class ServicoController {
     }
     
     @PostMapping
-    public ResponseEntity<Servico> criar(
-            @RequestBody Servico servico) {
-        Servico novoServico = servicoService.criar(servico);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoServico);
+    public ResponseEntity<ServicoDTO> criar(
+            @RequestBody ServicoRequestDTO dto) {
+        ServicoDTO servicoCriado = servicoService.criar(dto);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(servicoCriado);
     }
     
     @GetMapping
-    public ResponseEntity<List<Servico>> listarTodosServicos() {
-        List<Servico> servicos = servicoService.listarTodos();
+    public ResponseEntity<List<ServicoDTO>> listarTodos() {
+        List<ServicoDTO> servicos = servicoService.listarTodos();
+        
         return ResponseEntity.ok(servicos);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Servico> buscarPorId(
+    public ResponseEntity<ServicoDTO> buscarPorId(
             @PathVariable Long id) {
-        Servico servicoEncontrado = servicoService.buscarPorId(id);
-        return ResponseEntity.ok(servicoEncontrado);
+        ServicoDTO servico = servicoService.buscarPorId(id);
+        
+        return ResponseEntity.ok(servico);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Servico> atualizarServico(
+    public ResponseEntity<ServicoDTO> atualizar(
             @PathVariable Long id, 
-            @RequestBody Servico servico) {
-        Servico servicoAtualizado = servicoService.atualizar(id, servico);
+            @RequestBody ServicoRequestDTO dto) {
+        ServicoDTO servicoAtualizado = servicoService.atualizar(id, dto);
+        
         return ResponseEntity.ok(servicoAtualizado);
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarServico(
+    public ResponseEntity<Void> deletar(
             @PathVariable Long id) {
         servicoService.deletar(id);
+        
         return ResponseEntity.noContent().build();
     }
 }

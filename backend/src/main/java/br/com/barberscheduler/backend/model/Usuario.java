@@ -1,5 +1,11 @@
 package br.com.barberscheduler.backend.model;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import br.com.barberscheduler.backend.model.enums.PerfilUsuario;
 
 import jakarta.persistence.Column;
@@ -13,7 +19,10 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "usuarios")
+@SQLDelete(sql = "UPDATE usuarios SET ativo = false WHERE id = ?")
+@SQLRestriction("ativo = true")
 public class Usuario {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,12 +36,19 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
     
-    @Column(nullable = true, length = 20)
+    @Column(length = 20)
     private String telefone;
     
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private PerfilUsuario perfil;
+    
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime criadoEm;
+    
+    @Column(nullable = false)
+    private boolean ativo = true;
     
     public Usuario() {
     }
@@ -84,4 +100,20 @@ public class Usuario {
     public void setPerfil(PerfilUsuario perfil) {
         this.perfil = perfil;
     }
+
+    public LocalDateTime getCriadoEm() {
+        return criadoEm;
+    }
+
+    public void setCriadoEm(LocalDateTime criadoEm) {
+        this.criadoEm = criadoEm;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    } 
 }

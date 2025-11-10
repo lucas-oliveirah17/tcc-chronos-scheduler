@@ -1,5 +1,8 @@
 package br.com.barberscheduler.backend.model;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,17 +15,23 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "profissionais")
+@SQLDelete(sql = "UPDATE profissionais SET ativo = false WHERE id = ?")
+@SQLRestriction("ativo = true")
 public class Profissional {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false, unique = true)
+    private Usuario usuario;
+    
     @Column(length = 255)
     private String especialidades;
     
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id", nullable = false, unique = true)
-    private Usuario usuario;
+    @Column(nullable = false)
+    private boolean ativo = true;
     
     public Profissional() {
     }
@@ -50,4 +59,12 @@ public class Profissional {
     public void setEspecialidades(String especialidades) {
         this.especialidades = especialidades;
     }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    } 
 }

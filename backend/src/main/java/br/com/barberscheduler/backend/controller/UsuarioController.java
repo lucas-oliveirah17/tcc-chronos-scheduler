@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import br.com.barberscheduler.backend.model.Usuario;
+import br.com.barberscheduler.backend.dto.UsuarioCreateDTO;
+import br.com.barberscheduler.backend.dto.UsuarioDTO;
+import br.com.barberscheduler.backend.dto.UsuarioUpdateDTO;
 import br.com.barberscheduler.backend.service.UsuarioService;
 
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
+    
     private final UsuarioService usuarioService;
     
     public UsuarioController(UsuarioService usuarioService) {
@@ -26,30 +29,34 @@ public class UsuarioController {
     }
     
     @PostMapping
-    public ResponseEntity<Usuario> criar(
-            @RequestBody Usuario usuario) {
-        Usuario novoUsuario = usuarioService.criar(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
+    public ResponseEntity<UsuarioDTO> criar(
+            @RequestBody UsuarioCreateDTO dto) {
+        UsuarioDTO usuarioCriado = usuarioService.criar(dto);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCriado);
     }
     
     @GetMapping
-    public ResponseEntity<List<Usuario>> listarTodos() {
-        List<Usuario> usuarios = usuarioService.listarTodos();
+    public ResponseEntity<List<UsuarioDTO>> listarTodos() {
+        List<UsuarioDTO> usuarios = usuarioService.listarTodos();
+        
         return ResponseEntity.ok(usuarios); 
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(
+    public ResponseEntity<UsuarioDTO> buscarPorId(
             @PathVariable Long id) {
-        Usuario usuarioEncontrado = usuarioService.buscarPorId(id);
-        return ResponseEntity.ok(usuarioEncontrado);
+        UsuarioDTO usuario = usuarioService.buscarPorId(id);
+        
+        return ResponseEntity.ok(usuario);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizar(
+    public ResponseEntity<UsuarioDTO> atualizar(
             @PathVariable Long id, 
-            @RequestBody Usuario usuario) {
-        Usuario usuarioAtualizado = usuarioService.atualizar(id, usuario);
+            @RequestBody UsuarioUpdateDTO dto) {
+        UsuarioDTO usuarioAtualizado = usuarioService.atualizar(id, dto);
+        
         return ResponseEntity.ok(usuarioAtualizado);
     }
     
@@ -57,6 +64,7 @@ public class UsuarioController {
     public ResponseEntity<Void> deletar(
             @PathVariable Long id){
         usuarioService.deletar(id);
+        
         return ResponseEntity.noContent().build();
     }
 }

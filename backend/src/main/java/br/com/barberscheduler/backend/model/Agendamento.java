@@ -2,6 +2,10 @@ package br.com.barberscheduler.backend.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import br.com.barberscheduler.backend.model.enums.StatusAgendamento;
 
 import jakarta.persistence.Column;
@@ -18,20 +22,13 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "agendamentos")
+@SQLDelete(sql = "UPDATE usuarios SET ativo = false WHERE id = ?")
+@SQLRestriction("ativo = true")
 public class Agendamento {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false)
-    private LocalDateTime dataHoraInicio;
-    
-    @Column(nullable = false)
-    private LocalDateTime dataHoraFim;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private StatusAgendamento status;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)
@@ -45,6 +42,23 @@ public class Agendamento {
     @JoinColumn(name = "servico_id", nullable = false)
     private Servico servico;
     
+    @Column(nullable = false)
+    private LocalDateTime dataHoraInicio;
+    
+    @Column(nullable = false)
+    private LocalDateTime dataHoraFim;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private StatusAgendamento status;
+    
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime criadoEm;
+     
+    @Column(nullable = false)
+    private boolean ativo = true;
+    
     public Agendamento() {
     }
 
@@ -54,6 +68,30 @@ public class Agendamento {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Usuario getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Usuario cliente) {
+        this.cliente = cliente;
+    }
+
+    public Profissional getProfissional() {
+        return profissional;
+    }
+
+    public void setProfissional(Profissional profissional) {
+        this.profissional = profissional;
+    }
+
+    public Servico getServico() {
+        return servico;
+    }
+
+    public void setServico(Servico servico) {
+        this.servico = servico;
     }
 
     public LocalDateTime getDataHoraInicio() {
@@ -80,27 +118,19 @@ public class Agendamento {
         this.status = status;
     }
 
-    public Usuario getCliente() {
-        return cliente;
+    public LocalDateTime getCriadoEm() {
+        return criadoEm;
     }
 
-    public void setCliente(Usuario cliente) {
-        this.cliente = cliente;
+    public void setCriadoEm(LocalDateTime criadoEm) {
+        this.criadoEm = criadoEm;
     }
 
-    public Profissional getProfissional() {
-        return profissional;
+    public boolean isAtivo() {
+        return ativo;
     }
 
-    public void setProfissional(Profissional profissional) {
-        this.profissional = profissional;
-    }
-
-    public Servico getServico() {
-        return servico;
-    }
-
-    public void setServico(Servico servico) {
-        this.servico = servico;
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 }

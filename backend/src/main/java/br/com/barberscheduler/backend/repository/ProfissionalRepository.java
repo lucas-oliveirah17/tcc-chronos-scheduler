@@ -1,6 +1,5 @@
 package br.com.barberscheduler.backend.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,9 +12,8 @@ import br.com.barberscheduler.backend.model.Profissional;
 @Repository
 public interface ProfissionalRepository extends JpaRepository<Profissional, Long>{
     
-    @Query("SELECT p FROM Profissional p JOIN FETCH p.usuario")
-    List<Profissional> findAllWithUsuario();
+    Optional<Profissional> findByUsuarioId (Long usuarioId);
     
-    @Query("SELECT p FROM Profissional p JOIN FETCH p.usuario WHERE p.id = :id")
-    Optional<Profissional> findByIdWithUsuario(@Param("id") Long id);
+    @Query(value = "SELECT COUNT(1) > 0 FROM profissionais WHERE usuario_id = :usuarioId", nativeQuery = true)
+    boolean existsByUsuarioIdRegardlessOfStatus(@Param("usuarioId") Long usuarioId);
 }

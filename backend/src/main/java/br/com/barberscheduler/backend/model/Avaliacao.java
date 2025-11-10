@@ -2,6 +2,8 @@ package br.com.barberscheduler.backend.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,31 +12,38 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "avaliacoes")
 public class Avaliacao {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false)
-    private Integer Nota;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Usuario cliente;
     
-    @Lob
-    @Column(nullable = true)
-    private String comentario;
-    
-    @Column(nullable = false)
-    private LocalDateTime dataAvaliacao;
-    
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "agendamento_id", referencedColumnName = "id", nullable = false, unique = true)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "agendamento_id", nullable = false, unique = true)
     private Agendamento agendamento;
     
-    public Avaliacao() {   
+    @Column(nullable = false)
+    private Integer nota;
+    
+    @Lob
+    @Column(nullable = true, length = 500, columnDefinition = "TEXT")
+    private String comentario;
+    
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime criadoEm;
+        
+    public Avaliacao() {
     }
 
     public Long getId() {
@@ -45,12 +54,28 @@ public class Avaliacao {
         this.id = id;
     }
 
+    public Usuario getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Usuario cliente) {
+        this.cliente = cliente;
+    }
+
+    public Agendamento getAgendamento() {
+        return agendamento;
+    }
+
+    public void setAgendamento(Agendamento agendamento) {
+        this.agendamento = agendamento;
+    }
+
     public Integer getNota() {
-        return Nota;
+        return nota;
     }
 
     public void setNota(Integer nota) {
-        Nota = nota;
+        this.nota = nota;
     }
 
     public String getComentario() {
@@ -61,19 +86,11 @@ public class Avaliacao {
         this.comentario = comentario;
     }
 
-    public LocalDateTime getDataAvaliacao() {
-        return dataAvaliacao;
+    public LocalDateTime getCriadoEm() {
+        return criadoEm;
     }
 
-    public void setDataAvaliacao(LocalDateTime dataAvaliacao) {
-        this.dataAvaliacao = dataAvaliacao;
-    }
-
-    public Agendamento getAgendamento() {
-        return agendamento;
-    }
-
-    public void setAgendamento(Agendamento agendamento) {
-        this.agendamento = agendamento;
+    public void setCriadoEm(LocalDateTime criadoEm) {
+        this.criadoEm = criadoEm;
     }
 }

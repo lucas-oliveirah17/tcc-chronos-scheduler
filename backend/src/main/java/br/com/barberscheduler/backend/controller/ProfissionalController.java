@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import br.com.barberscheduler.backend.model.Profissional;
+import br.com.barberscheduler.backend.dto.ProfissionalDTO;
+import br.com.barberscheduler.backend.dto.ProfissionalRequestDTO;
 import br.com.barberscheduler.backend.service.ProfissionalService;
 
 @RestController
 @RequestMapping("/api/profissionais")
 public class ProfissionalController {
+    
     private final ProfissionalService profissionalService;
     
     public ProfissionalController(ProfissionalService profissionalService) {
@@ -26,30 +28,30 @@ public class ProfissionalController {
     }
     
     @PostMapping
-    public ResponseEntity<Profissional> criar(
-            @RequestBody Profissional profissional) {
-        Profissional novoProfissional = profissionalService.criar(profissional);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoProfissional);
+    public ResponseEntity<ProfissionalDTO> criar(
+            @RequestBody ProfissionalRequestDTO dto) {
+        ProfissionalDTO profissionalCriado = profissionalService.criar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(profissionalCriado);
     }
     
     @GetMapping
-    public ResponseEntity<List<Profissional>> listarTodos() {
-        List<Profissional> profissionais = profissionalService.listarTodos();
+    public ResponseEntity<List<ProfissionalDTO>> listarTodos() {
+        List<ProfissionalDTO> profissionais = profissionalService.listarTodos();
         return ResponseEntity.ok(profissionais);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Profissional> buscarPorId(
+    public ResponseEntity<ProfissionalDTO> buscarPorId(
             @PathVariable Long id) {
-        Profissional profissionalEncontrado = profissionalService.buscarPorId(id);
-        return ResponseEntity.ok(profissionalEncontrado);
+        ProfissionalDTO profissional = profissionalService.buscarPorId(id);
+        return ResponseEntity.ok(profissional);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Profissional> atualizar(
+    public ResponseEntity<ProfissionalDTO> atualizar(
             @PathVariable Long id,
-            @RequestBody Profissional profissional) {
-        Profissional profissionalAtualizado = profissionalService.atualizar(id, profissional);
+            @RequestBody ProfissionalRequestDTO dto) {
+        ProfissionalDTO profissionalAtualizado = profissionalService.atualizar(id, dto);
         return ResponseEntity.ok(profissionalAtualizado);
     }
     

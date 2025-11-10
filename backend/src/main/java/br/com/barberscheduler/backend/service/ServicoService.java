@@ -1,10 +1,13 @@
 package br.com.barberscheduler.backend.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
+import br.com.barberscheduler.backend.dto.ServicoDTO;
+import br.com.barberscheduler.backend.dto.ServicoRequestDTO;
 import br.com.barberscheduler.backend.model.Servico;
 import br.com.barberscheduler.backend.repository.ServicoRepository;
 
@@ -19,43 +22,98 @@ public class ServicoService {
         this.servicoRepository = servicoRepository;
     }
     
-    public List<Servico> listarTodos() {
-        return servicoRepository.findAll();
+    private ServicoDTO converterParaDTO(Servico servico) {
+        ServicoDTO dto = new ServicoDTO();
+        
+        dto.setId(servico.getId());
+        dto.setNome(servico.getNome());
+        dto.setDescricao(servico.getDescricao());
+        dto.setDuracaoMinutos(servico.getDuracaoMinutos());
+        dto.setPreco(servico.getPreco());
+        
+        return dto;
     }
     
-    public Servico buscarPorId(Long id) {
-        Optional<Servico> servico = servicoRepository.findById(id);
-        return servico.orElseThrow(
-                () -> new EntityNotFoundException(
-                        "Serviço de ID " + id + " não encontrado."));
+    @Transactional(readOnly = true)
+    public Servico findEntidadeById(Long id) {
+        return servicoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Serviço de ID " + id + " não encontrado ou inativo.") );
     }
     
-    public Servico criar(Servico servico) { 
-        if(servicoRepository.findByNome(servico.getNome()).isPresent()) {
+    @Transactional(readOnly = true)
+    public List<ServicoDTO> listarTodos() {
+        return servicoRepository.findAll()
+                .stream()
+                .map(this::converterParaDTO)
+                .collect(Collectors.toList());
+    }
+    
+    @Transactional(readOnly = true)
+    public ServicoDTO buscarPorId(Long id) {
+        Servico servico = servicoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Serviço de ID " + id + " não encontrado ou inativo."));
+        
+        return converterParaDTO(servico);
+    }
+    
+    @Transactional
+    public ServicoDTO criar(ServicoRequestDTO dto) { 
+        if(servicoRepository.existsByNomeRegardlessOfStatus(dto.getNome())) {
             throw new IllegalArgumentException(
-                    "Nome de serviço já cadastrado.");
+                    "O serviço " + dto.getNome() + " já está cadastrado.");
         }
         
-        return servicoRepository.save(servico);
+        Servico novoServico = new Servico();
+        novoServico.setNome(dto.getNome());
+        novoServico.setDescricao(dto.getDescricao());
+        novoServico.setDuracaoMinutos(dto.getDuracaoMinutos());
+        novoServico.setPreco(dto.getPreco());
+        
+        Servico servicoSalvo = servicoRepository.save(novoServico);
+        
+        return converterParaDTO(servicoSalvo);
     }
     
-    public Servico atualizar(Long id, Servico servicoAtualizado) {
+    @Transactional
+    public ServicoDTO atualizar(Long id, ServicoRequestDTO dto) {
         Servico servicoExistente = servicoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Serviço de ID " + id + " não encontrado."));
+                        "Serviço de ID " + id + " não encontrado ou inativo."));
+           
+        if(dto.getNome() != null && 
+                !dto.getNome().equals(servicoExistente.getNome())) {
+            servicoRepository.findByNomeRegardlessOfStatus(dto.getNome())
+                .ifPresent(u -> {
+                    throw new IllegalArgumentException(
+                            "O nome de serviço " + dto.getNome() + " já está cadastrado.");
+                    });
+            servicoExistente.setNome(dto.getNome());
+        }
         
-        servicoExistente.setNome(servicoAtualizado.getNome());
-        servicoExistente.setDescricao(servicoAtualizado.getDescricao());
-        servicoExistente.setDuracaoMinutos(servicoAtualizado.getDuracaoMinutos());
-        servicoExistente.setPreco(servicoAtualizado.getPreco());
+        if(dto.getDescricao() != null) {
+            servicoExistente.setDescricao(dto.getDescricao());
+        }
         
-        return servicoRepository.save(servicoExistente);
+        if(dto.getDuracaoMinutos() != null) {
+            servicoExistente.setDuracaoMinutos(dto.getDuracaoMinutos());
+        }
+        
+        if(dto.getPreco() != null) {
+            servicoExistente.setPreco(dto.getPreco());
+        }
+        
+        Servico servicoAtualizado = servicoRepository.save(servicoExistente);
+        
+        return converterParaDTO(servicoAtualizado);
     }
     
+    @Transactional
     public void deletar(Long id) {
         if(!servicoRepository.existsById(id)) {
             throw new EntityNotFoundException(
-                    "Serviço de ID " + id + " não encontrado.");
+                    "Serviço de ID " + id + " não encontrado ou inativo.");
         }
         servicoRepository.deleteById(id);
     }

@@ -2,6 +2,8 @@ package br.com.barberscheduler.backend.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,24 +18,26 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "anotacoes_cliente")
 public class AnotacaoCliente {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Lob
-    @Column(nullable = false)
-    private String anotacao;
-    
-    @Column(nullable = false)
-    private LocalDateTime dataCriacao;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profissional_id", nullable = false)
+    private Profissional profissional;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Usuario cliente;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profissional_id", nullable = false)
-    private Profissional profissional;
+    @Lob
+    @Column(nullable = false, length = 500, columnDefinition = "TEXT")
+    private String anotacao;
+    
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime criadoEm;
     
     public AnotacaoCliente() {
     }
@@ -46,20 +50,12 @@ public class AnotacaoCliente {
         this.id = id;
     }
 
-    public String getAnotacao() {
-        return anotacao;
+    public Profissional getProfissional() {
+        return profissional;
     }
 
-    public void setAnotacao(String anotacao) {
-        this.anotacao = anotacao;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
+    public void setProfissional(Profissional profissional) {
+        this.profissional = profissional;
     }
 
     public Usuario getCliente() {
@@ -70,11 +66,19 @@ public class AnotacaoCliente {
         this.cliente = cliente;
     }
 
-    public Profissional getProfissional() {
-        return profissional;
+    public String getAnotacao() {
+        return anotacao;
     }
 
-    public void setProfissional(Profissional profissional) {
-        this.profissional = profissional;
+    public void setAnotacao(String anotacao) {
+        this.anotacao = anotacao;
+    }
+
+    public LocalDateTime getCriadoEm() {
+        return criadoEm;
+    }
+
+    public void setCriadoEm(LocalDateTime criadoEm) {
+        this.criadoEm = criadoEm;
     }
 }
