@@ -109,8 +109,8 @@ Para rodar este projeto em sua máquina local, siga os passos abaixo. O projeto 
 **Pré-requisitos:**
 * [Git](https://git-scm.com/)
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/) (para o banco de dados)
-* [JDK 21 (OpenJDK)] (https://adoptium.net/))
-* [Node.js 24 (LTS)](https://nodejs.org/en/blog/release/v24.11.0) (Use o [NVM](https://github.com/nvm-sh/nvm) para gerenciar)
+* [JDK 21 (OpenJDK)](https://adoptium.net/))
+* [Node.js 24 (LTS)](https://nodejs.org/en/blog/release/v24.11.0) (Use o NVML ([Linux](https://github.com/nvm-sh/nvm)/[Windows](https://github.com/coreybutler/nvm-windows)) para gerenciar)
 * IDE Java ([Eclipse](https://www.eclipse.org/downloads/packages/release/2025-09/r/eclipse-ide-java-developers)) e editor de código ([VS Code](https://code.visualstudio.com/download))
 
 **1. Clonar o Repositório**
@@ -119,7 +119,7 @@ git clone https://github.com/lucas-oliveirah17/tcc-barber-scheduler.git
 cd tcc-barber-scheduler
 ```
 
-**2.Configurar Variáveis de Ambiente:**
+**2. Configurar Variáveis de Ambiente:**
 
 **a. Para o Docker (Banco de Dados):**
 * Na raiz do projeto (`tcc-barber-scheduler`), crie um arquivo chamado `.env`.
@@ -156,8 +156,21 @@ docker-compose up -d
 * Execute este arquivo como uma Aplicação Java.
 * O servidor estará rodando em `http://localhost:8080`.
 
-**5.Rodar o Front-end (React):** 
+**5.Rodar o Front-end (React):**
+O Frond-end usa o NVM (Node Version Manager) para garantir que todos os desenvolvedores usem a mesma versão do Node.js (Node 24 LTS).
 * Em um terminal separado, navegue até a pasta `frontend`
+* Em seguida, ative a versão correta do Node.js:
+	* **Linux**:
+	```bash
+	nvm use
+	```
+	(Se for a primeira vez, o terminal avisará se é necessário rodar `nvm install lts/rei` 
+	
+	* **Windows**:
+	```bash
+	nvm install 24
+	nvm use 24
+	```
 * Instale as dependências (apenas na primeira vez):
 ```bash
 npm install
