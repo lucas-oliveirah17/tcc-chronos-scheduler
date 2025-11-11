@@ -1,0 +1,98 @@
+* {box-sizing: border-box}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-grid input[type="text"],
+.form-grid input[type="password"],
+.form-grid input[type="email"],
+.form-grid input[type="tel"] {
+  width: 100%;
+}
+
+/* Full-width input fields */
+input[type=text], 
+input[type=password],
+input[type=email],
+input[type=tel] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #e9e4e4;
+  border-radius: 10px;
+}
+
+input[type=text]:focus, 
+input[type=password]:focus,
+input[type=email]:focus,
+input[type=tel]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+label {
+  margin-left: 8px;
+}
+
+hr {
+  border: 1px solid #e9e4e4;
+  margin-bottom: 25px;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+button:hover {
+  opacity:1;
+}
+
+/* Extra styles for the cancel button */
+.cancelarbtn {
+  padding: 14px 20px;
+  background-color: #f44336;
+}
+
+/* Float cancel and signup buttons and add an equal width */
+.cancelarbtn, .cadastrarbtn {
+  float: left;
+  width: 50%;
+}
+
+/* Add padding to container elements */
+.container {
+  padding: 16px;
+}
+
+/* Clear floats */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Change styles for cancel button and signup button on extra small screens */
+@media screen and (max-width: 300px) {
+  .cancelarbtn, .cadastrarbtn {
+    width: 100%;
+  }
+}

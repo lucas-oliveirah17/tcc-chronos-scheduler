@@ -20,7 +20,7 @@ export function Navbar() {
           <i className="fa fa-fw fa-user"></i> Login
         </NavLink>
 
-        <NavLink to="/cadastrar" className="navbar-right">
+        <NavLink to="/cadastro" className="navbar-right">
           <i className="fa fa-fw fa-pencil-square-o"></i> Cadastrar
         </NavLink>
       </div>
