@@ -110,7 +110,7 @@ Para rodar este projeto em sua máquina local, siga os passos abaixo. O projeto 
 * [Git](https://git-scm.com/)
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/) (para o banco de dados)
 * [JDK 21 (OpenJDK)](https://adoptium.net/))
-* [Node.js 24 (LTS)](https://nodejs.org/en/blog/release/v24.11.0) (Use o NVML ([Linux](https://github.com/nvm-sh/nvm)/[Windows](https://github.com/coreybutler/nvm-windows)) para gerenciar)
+* [Node.js 24 (LTS)](https://nodejs.org/en/blog/release/v24.11.0) (Use o NVM ([Linux](https://github.com/nvm-sh/nvm)/[Windows](https://github.com/coreybutler/nvm-windows)) para gerenciar)
 * IDE Java ([Eclipse](https://www.eclipse.org/downloads/packages/release/2025-09/r/eclipse-ide-java-developers)) e editor de código ([VS Code](https://code.visualstudio.com/download))
 
 **1. Clonar o Repositório**
@@ -183,12 +183,12 @@ npm run dev
 ---
 
 ## 🎓 Autores
-- **Lucas Silva de Oliveira** - Desenvolvedor Back-end
+- **Lucas Silva de Oliveira** - Desenvolvedor Back-end & Segurança
    
    [![GitHub](https://img.shields.io/badge/GitHub-100000?style=plastic&logo=github&logoColor=white)](https://github.com/lucas-oliveirah17)
    [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=plastic&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/lucas-oliveirah17/)
 
-- **Daniel Navarro Porto** - Desenvolvedor Front-end & Segurança
+- **Daniel Navarro Porto** - Desenvolvedor Front-end 
 
    [![GitHub](https://img.shields.io/badge/GitHub-100000?style=plastic&logo=github&logoColor=white)](https://github.com/danielnporto)
    [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=plastic&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/danielnporto/)
