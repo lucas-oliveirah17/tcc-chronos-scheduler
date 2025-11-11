@@ -1,10 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
-
-// Páginas de exemplo
-const Home = () => <h1>Página Inicial</h1>;
-const Agendamentos = () => <h1>Página de Agendamentos</h1>;
-const Login = () => <h1>Página de Login</h1>;
-const Cadastrar = () => <h1>Página de Cadastro</h1>;
+import { Agendamentos } from '../pages/Agendamentos';
+import { Cadastro } from '../pages/Cadastro';
+import { Home } from '../pages/Home'
+import { Login } from '../pages/Login'
 
 export function AppRoutes() {
   return (
@@ -12,7 +10,7 @@ export function AppRoutes() {
       <Route path="/"  element={<Home />} />
       <Route path="/agendamentos" element={<Agendamentos />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/cadastrar" element={<Cadastrar />} />
+      <Route path="/cadastro" element={<Cadastro />} />
     </Routes>
   );
 }
