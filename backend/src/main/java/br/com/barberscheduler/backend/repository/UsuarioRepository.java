@@ -18,7 +18,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
      * Encontra um usuário (ativo) pelo email.
     */
     Optional<Usuario> findByEmail(String email);
-    
+        
     /**
      * Lista todos os usuários (ativo) de um determinado perfil.
     */

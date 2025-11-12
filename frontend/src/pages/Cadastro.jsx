@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import './Cadastro.css';
@@ -109,7 +109,8 @@ export function Cadastro() {
             <input 
               type="email" 
               placeholder="Digite o seu e-mail" 
-              name="email" value={formData.email} 
+              name="email" 
+              value={formData.email} 
               id="email" 
               onChange={handleChange} 
               required 

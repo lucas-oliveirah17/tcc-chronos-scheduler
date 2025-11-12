@@ -16,7 +16,8 @@
 }
 
 /* Navbar links */
-.navbar a {
+.navbar a,
+#deslogarbtn {
   display: block;
   text-align: center;
   padding: 14px 16px;
@@ -25,8 +26,13 @@
   font-size: 17px;
 }
 
+#deslogarbtn {
+  background-color: #e31414;
+}
+
 /* Navbar links on mouse-over */
-.navbar a:hover {
+.navbar a:hover,
+#deslogarbtn:hover {
   background-color: #000;
 }
 
@@ -34,6 +40,8 @@
 .active {
   background-color: #04AA6D;
 }
+
+
 
 /* Add responsiveness - will automatically display the navbar vertically instead of horizontally on screens less than 500 pixels */
 @media screen and (max-width: 500px) {

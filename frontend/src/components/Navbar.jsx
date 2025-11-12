@@ -1,7 +1,26 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import './Navbar.css'; // Importa o CSS que acabamos de criar
 
 export function Navbar() {
+  const navigate = useNavigate();
+  const [estaLogado, setEstaLogado] = useState(!!localStorage.getItem("token"));
+
+  useEffect(() => {
+    const atualizarStatus = () => setEstaLogado(!!localStorage.getItem("token"));
+
+    // Ouvinte do evento customizado
+    window.addEventListener("authChange", atualizarStatus);
+
+    return () => window.removeEventListener("authChange", atualizarStatus);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.dispatchEvent(new Event("authChange")); // dispara o evento global
+    navigate("/login");
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-left">
@@ -16,13 +35,21 @@ export function Navbar() {
 
       {/* Autenticação - Orientado à direita da Navbar*/}
       <div className="navbar-right">
-        <NavLink to="/login" className="navbar-right">
-          <i className="fa fa-fw fa-user"></i> Login
-        </NavLink>
+        {!estaLogado ?(
+          <>
+            <NavLink to="/login">
+              <i className="fa fa-fw fa-user"></i> Login
+            </NavLink>
 
-        <NavLink to="/cadastro" className="navbar-right">
-          <i className="fa fa-fw fa-pencil-square-o"></i> Cadastrar
-        </NavLink>
+            <NavLink to="/cadastro">
+              <i className="fa fa-fw fa-pencil-square-o"></i> Cadastrar
+            </NavLink>
+          </>
+        ) : (
+          <button id="deslogarbtn" onClick={handleLogout} >
+            <i className="fa fa-fw fa-sign-out"></i> Deslogar
+          </button>
+        )}
       </div>
     </nav>
   );
