@@ -1,10 +1,15 @@
 package br.com.barberscheduler.backend.model;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.barberscheduler.backend.model.enums.PerfilUsuario;
 
@@ -21,8 +26,9 @@ import jakarta.persistence.Table;
 @Table(name = "usuarios")
 @SQLDelete(sql = "UPDATE usuarios SET ativo = false WHERE id = ?")
 @SQLRestriction("ativo = true")
-public class Usuario {
-    
+public class Usuario implements UserDetails {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -51,7 +57,7 @@ public class Usuario {
     private boolean ativo = true;
     
     public Usuario() {
-    }
+    }  
 
     public Long getId() {
         return id;
@@ -115,5 +121,26 @@ public class Usuario {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // TODO Auto-generated method stub
+        if(this.perfil == PerfilUsuario.ADMINISTRADOR)
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_USER"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        // TODO Auto-generated method stub
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        // TODO Auto-generated method stub
+        return nome;
     } 
 }
