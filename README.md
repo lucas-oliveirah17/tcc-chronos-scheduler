@@ -139,6 +139,12 @@ DB_NAME=barber_db
 spring.datasource.url=jdbc:postgresql://localhost:5432/barber_db
 spring.datasource.username=barber_admin
 spring.datasource.password=sua_senha_aqui
+
+# Chave Secreta (pode ser gerada no Git Bash, pelo comando "openssl rand -base64 64")
+jwt.secret=CHAVE_SECRETA
+
+# Tempo de expiração do token
+jwt.expiration.hours = 8
 ```
 
 
