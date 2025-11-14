@@ -36,20 +36,21 @@ public class SecurityConfig {
             
             // Define quais requisições https são autorizadas/autenticadas
             .authorizeHttpRequests(authorize -> authorize
-                    // Endpoint Administrador
-                    .requestMatchers("api/profissionais/**").hasRole("ADMINISTRADOR")
-                    .requestMatchers("api/servicos/**").hasRole("ADMINISTRADOR")
-                    // Endpoint Funcionario
-                    // Endpoint Usuario
-                    // Endpoint Público
-                    .requestMatchers(HttpMethod.POST, 
-                            "api/auth/login", 
-                            "api/usuarios")
-                    .permitAll()
                     
-                    .requestMatchers(HttpMethod.GET, 
-                            "api/usuarios")
-                    .permitAll()
+                    // ENDPOINTS PÚBLICAS
+                    .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/servicos").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/servicos/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/profissionais").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/profissionais/**").permitAll()
+                    
+                    // ENDPOINTS DE CLIENTES
+                    
+                    // ENDPOINTS DE PROFISSIONAIS
+                    
+                    // ENDPOINTS DE ADMINISTRADOR
+                    .anyRequest().hasRole("ADMINISTRADOR")             
             )
             
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

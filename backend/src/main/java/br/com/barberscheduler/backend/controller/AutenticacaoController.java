@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.barberscheduler.backend.config.TokenService;
-import br.com.barberscheduler.backend.dto.AutenticacaoDTO;
-import br.com.barberscheduler.backend.dto.TokenDTO;
+import br.com.barberscheduler.backend.dto.AutenticacaoRequestDTO;
+import br.com.barberscheduler.backend.dto.AutenticacaoResponseDTO;
+import br.com.barberscheduler.backend.dto.UsuarioDTO;
 import br.com.barberscheduler.backend.model.Usuario;
 import br.com.barberscheduler.backend.repository.AutenticacaoRepository;
 
@@ -31,13 +32,17 @@ public class AutenticacaoController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(
-            @RequestBody AutenticacaoDTO dto) {
+    public ResponseEntity<AutenticacaoResponseDTO> login(
+            @RequestBody AutenticacaoRequestDTO dto) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getSenha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
         
-        var token = tokenService.gerarToken((Usuario) auth.getPrincipal());
+        Usuario usuarioAutenticado = (Usuario) auth.getPrincipal();
         
-        return ResponseEntity.ok(new TokenDTO(token));
+        var token = tokenService.gerarToken(usuarioAutenticado);
+        
+        var usuarioDTO = new UsuarioDTO(usuarioAutenticado);
+        
+        return ResponseEntity.ok(new AutenticacaoResponseDTO(token, usuarioDTO));
     }
 }

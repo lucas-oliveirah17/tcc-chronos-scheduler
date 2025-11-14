@@ -35,6 +35,12 @@ public class Profissional {
     
     public Profissional() {
     }
+    
+    // Construtor de conveniência (para o DataLoader)
+    public Profissional(Usuario usuario, String especialidades) {
+        this.usuario = usuario;
+        this.especialidades = especialidades;
+    }
 
     public Long getId() {
         return id;

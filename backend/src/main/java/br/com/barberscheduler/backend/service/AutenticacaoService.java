@@ -21,5 +21,4 @@ public class AutenticacaoService implements UserDetailsService {
         // TODO Auto-generated method stub
         return autenticacaoRepository.findByEmail(username);
     }
-
 }
