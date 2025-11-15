@@ -9,7 +9,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-        .allowedOrigins("http://localhost:8080", "chronos-agendamentos.vercel.app")
+        .allowedOrigins(
+                "http://localhost:5173", 
+                "https://chronos-agendamentos.vercel.app")
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
         .allowedHeaders("*")
         .allowCredentials(true);
