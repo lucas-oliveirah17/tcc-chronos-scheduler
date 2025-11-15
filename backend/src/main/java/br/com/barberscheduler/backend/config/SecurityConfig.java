@@ -36,7 +36,7 @@ public class SecurityConfig {
             
             // Define quais requisições https são autorizadas/autenticadas
             .authorizeHttpRequests(authorize -> authorize
-                    
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     // ENDPOINTS PÚBLICAS
                     .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
