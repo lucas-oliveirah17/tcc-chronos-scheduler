@@ -1,65 +1,134 @@
-/* Style the navigation bar */
+/* ================================================== */
+/* ========= ESTILOS BASE DA NAVBAR (CORRIGIDO) ========= */
+/* ================================================== */
+
 .navbar {
   display: flex;
-  background-color: #555;
-  justify-content: space-between;
+  justify-content: space-between; /* Espaça a esquerda e a direita */
   align-items: center;
+  background-color: #333;
+  /* A linha "overflow: hidden;" foi REMOVIDA daqui */
+  font-family: Arial, sans-serif;
   
-  padding: 0 1rem;
-  width: 100%;
-  box-sizing: border-box;
+  /* Adicionamos um z-index alto para garantir que a navbar
+     fique acima do conteúdo da página, mas abaixo do dropdown */
+  position: relative;
+  z-index: 50; 
 }
 
-.navbar-left,
-.navbar-right {
-  display: flex;
-}
-
-/* Navbar links */
-.navbar a,
-#deslogarbtn {
+/* Links comuns da navbar (baseado no seu NavLink) */
+.navbar a {
   display: block;
+  color: white;
   text-align: center;
   padding: 14px 16px;
-  color: white;
   text-decoration: none;
   font-size: 17px;
 }
 
+.navbar a:hover {
+  background-color: #555;
+  color: white;
+}
+
+/* Link ativo (página atual) */
+.navbar a.active {
+  background-color: #04AA6D; /* Exemplo de cor */
+  color: white;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Estilo do botão de Deslogar (para parecer um link) */
 #deslogarbtn {
-  background-color: #e31414;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 
-/* Navbar links on mouse-over */
-.navbar a:hover,
 #deslogarbtn:hover {
-  background-color: #000;
-}
-
-/* Current/active navbar link */
-.active {
-  background-color: #04AA6D;
+  background-color: #555;
+  color: white;
 }
 
 
+/* ================================================== */
+/* ========= ESTILOS DO DROPDOWN (ADMIN) ========= */
+/* ================================================== */
 
-/* Add responsiveness - will automatically display the navbar vertically instead of horizontally on screens less than 500 pixels */
-@media screen and (max-width: 500px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0;
-  }
+.navbar-admin {
+  display: flex;
+  align-items: center;
+}
 
-  .navbar-left,
-  .navbar-right {
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
+/* Container de cada item dropdown */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
 
-  .navbar a {
-    width: 100%;
-    box-sizing: border-box;
-  }
+/* Botão que dispara o dropdown */
+.dropdown-trigger {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 17px;
+  white-space: nowrap;
+}
+
+/* Container do menu (escondido por padrão) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  /* z-index MAIOR que o da navbar para flutuar por cima */
+  z-index: 100; 
+  border-radius: 4px;
+}
+
+/* Links dentro do dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  font-size: 16px;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+/* Mostra o menu no hover do .dropdown */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Efeito de hover no trigger */
+.dropdown:hover .dropdown-trigger {
+  background-color: #555;
 }
