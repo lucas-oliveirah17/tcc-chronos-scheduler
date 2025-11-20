@@ -1,0 +1,5 @@
+# Ignora pastas de build e configuração do Git/Maven
+target/
+.git/
+.gitignore
+.mvn/

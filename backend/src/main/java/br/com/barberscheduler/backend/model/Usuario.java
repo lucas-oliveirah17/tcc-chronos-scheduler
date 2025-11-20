@@ -57,7 +57,16 @@ public class Usuario implements UserDetails {
     private boolean ativo = true;
     
     public Usuario() {
-    }  
+    }
+    
+    // Construtor de conveniência (para o DataLoader)
+    public Usuario(String nome, String email, String senha, String telefone, PerfilUsuario perfil) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.telefone = telefone;
+        this.perfil = perfil;        // 'ativo' e 'criadoEm' já têm valores padrão ou são gerenciados
+    }
 
     public Long getId() {
         return id;
@@ -127,9 +136,12 @@ public class Usuario implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // TODO Auto-generated method stub
         if(this.perfil == PerfilUsuario.ADMINISTRADOR)
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
-                    new SimpleGrantedAuthority("ROLE_USER"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"),
+                    new SimpleGrantedAuthority("ROLE_CLIENTE"));
+        else if (this.perfil == PerfilUsuario.PROFISSIONAL)
+            return List.of(new SimpleGrantedAuthority("ROLE_PROFISSIONAL"));
+        else 
+            return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
     }
 
     @Override
@@ -141,6 +153,6 @@ public class Usuario implements UserDetails {
     @Override
     public String getUsername() {
         // TODO Auto-generated method stub
-        return nome;
+        return email;
     } 
 }

@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASS}   # Lê a senha do arquivo .env
       POSTGRES_DB: ${DB_NAME}         # Lê o nome do banco do arquivo .env
     ports:
-      - "5432:5432"  # Mapeia a porta 5432 do seu PC para a porta 5432 do contêiner
+      - ${DB_PORT}  # Mapeia a porta 5432 do seu PC para a porta 5432 do contêiner
     volumes:
       - postgres_data_volume:/var/lib/postgresql/data # Garante que os dados do banco persistam
      

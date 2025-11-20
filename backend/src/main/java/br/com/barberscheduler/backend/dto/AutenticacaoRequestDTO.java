@@ -2,14 +2,14 @@ package br.com.barberscheduler.backend.dto;
 
 import br.com.barberscheduler.backend.model.Usuario;
 
-public class AutenticacaoDTO {
+public class AutenticacaoRequestDTO {
     private String email;
     private String senha;
     
-    public AutenticacaoDTO() {
+    public AutenticacaoRequestDTO() {
     }
     
-    public AutenticacaoDTO(Usuario usuario) {
+    public AutenticacaoRequestDTO(Usuario usuario) {
         this.email = usuario.getEmail();
         this.senha = usuario.getSenha();
     }

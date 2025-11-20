@@ -39,6 +39,14 @@ public class Servico {
     
     public Servico() {
     }
+    
+    // Construtor de conveniência (para o DataLoader)
+    public Servico(String nome, String descricao, Integer duracaoMinutos, BigDecimal preco) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.duracaoMinutos = duracaoMinutos;
+        this.preco = preco;
+    }
 
     public Long getId() {
         return id;

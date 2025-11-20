@@ -66,6 +66,22 @@ public class Agendamento {
     
     public Agendamento() {
     }
+    
+    // Construtor de conveniência (para o DataLoader)
+    public Agendamento(
+            Usuario cliente, 
+            Profissional profissional, 
+            Servico servico, 
+            LocalDateTime dataHoraInicio, 
+            LocalDateTime dataHoraFim, 
+            StatusAgendamento status) {
+        this.cliente = cliente;
+        this.profissional = profissional;
+        this.servico = servico;
+        this.dataHoraInicio = dataHoraInicio;
+        this.dataHoraFim = dataHoraFim;
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
