@@ -134,14 +134,8 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO Auto-generated method stub
-        if(this.perfil == PerfilUsuario.ADMINISTRADOR)
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"),
-                    new SimpleGrantedAuthority("ROLE_CLIENTE"));
-        else if (this.perfil == PerfilUsuario.PROFISSIONAL)
-            return List.of(new SimpleGrantedAuthority("ROLE_PROFISSIONAL"));
-        else 
-            return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+        
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.perfil.name()));
     }
 
     @Override

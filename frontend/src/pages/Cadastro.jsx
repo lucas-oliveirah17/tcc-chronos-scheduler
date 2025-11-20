@@ -1,148 +1,136 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import './Cadastro.css';
+import { UserPlus, User, Mail, Phone, Lock } from 'lucide-react';
 
 export function Cadastro() {
   const navigate = useNavigate();
-
-  // State para guardar os dados do formulário
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
     telefone: '',
     senha: '',
   });
-
-  // State separado para o "Repetir Senha"
   const [senhaRepeat, setSenhaRepeat] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // Função para atualizar o state a cada tecla digitada
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   }
 
-  // Função para lidar com o envio do formulário
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Impede o recarregamento da página
-
+    e.preventDefault();
     if (formData.senha !== senhaRepeat) {
-      alert('Erro: As senhas não conferem. Por favor, digite novamente.');
+      alert('As senhas não conferem.');
       return;
     }
 
+    setLoading(true);
     try {
-      const dadosParaEnviar = {
-        nome: formData.nome,
-        email: formData.email,
-        senha: formData.senha,
-        telefone: formData.telefone,
-        perfil: 'CLIENTE' // Perfil fixo para cadastro de cliente
-      };
-
-      await api.post('/api/usuarios', dadosParaEnviar);
-
-      alert('Cadastro realizado com sucesso! Você será redirecionado para o login.')
+      await api.post('/usuarios', { ...formData, perfil: 'CLIENTE' });
+      alert('Cadastro realizado com sucesso!');
       navigate('/login');
-
     } catch (error) {
       console.error('Erro ao cadastrar:', error);
-      if(error.response && error.response.data) {
-        alert(`Erro: ${error.response.data}`);
-      } else {
-        alert('Ocorreu um erro ao tentar cadastrar.')
-      }
+      alert('Erro ao realizar cadastro.');
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ border: "1px solid #ccc" }}>
-      <div className="container">
-        <h1>Cadastre-se</h1>
-        <p>Preenchar este formulário para criar uma conta.</p>
-        <hr />
+    <div className="container" style={{ minHeight: '90vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem' }}>
+      <div className="card" style={{ maxWidth: '500px', width: '100%', backdropFilter: 'blur(10px)', backgroundColor: 'rgba(30, 41, 59, 0.7)' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem', background: 'linear-gradient(135deg, #00C6FF 0%, #0072FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Criar Conta</h2>
+          <p style={{ color: 'var(--text-muted)' }}>Junte-se ao Chronos hoje</p>
+        </div>
 
-        <div className="form-grid">
-          {/* Coluna Esquerda */}
-          <div>
-            <label htmlFor="nome"><b>Nome</b></label>
-            <input 
-              type="text" 
-              placeholder="Digite o seu nome" 
-              name="nome" 
-              id="nome" 
-              value={formData.nome} 
-              onChange={handleChange} 
-              required 
-            />
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label htmlFor="nome">Nome Completo</label>
+            <div style={{ position: 'relative' }}>
+              <input
+                type="text"
+                name="nome"
+                placeholder="Seu nome"
+                value={formData.nome}
+                onChange={handleChange}
+                required
+                style={{ paddingLeft: '1rem' }}
+              />
+            </div>
+          </div>
 
-            <label htmlFor="senha"><b>Senha</b></label>
-            <input 
-              type="password" 
-              placeholder="Digite a sua senha" 
-              name="senha" 
-              id="senha" 
-              value={formData.senha} 
-              onChange={handleChange} 
-              required 
-            />
-
-            <label htmlFor="telefone"><b>Telefone</b></label>
-            <input 
-              type="tel" 
-              placeholder="Digite o seu telefone" 
-              name="telefone" 
-              id="telefone" 
-              value={formData.telefone} 
+          <div style={{ marginBottom: '1rem' }}>
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="seu@email.com"
+              value={formData.email}
               onChange={handleChange}
               required
             />
           </div>
 
-          {/* Coluna Direita */}
-          <div>
-            <label htmlFor="email"><b>E-mail</b></label>
-            <input 
-              type="email" 
-              placeholder="Digite o seu e-mail" 
-              name="email" 
-              value={formData.email} 
-              id="email" 
-              onChange={handleChange} 
-              required 
-            />
-
-            <label htmlFor="senha-repeat"><b>Repita a senha</b></label>
-            <input 
-             type="password" 
-             placeholder="Digite novamente a sua senha" 
-             name="senha-repeat" 
-             id="senha-repeat" 
-             onChange={(e) => setSenhaRepeat(e.target.value)} 
-             required 
+          <div style={{ marginBottom: '1rem' }}>
+            <label htmlFor="telefone">Telefone</label>
+            <input
+              type="tel"
+              name="telefone"
+              placeholder="(11) 99999-9999"
+              value={formData.telefone}
+              onChange={handleChange}
+              required
             />
           </div>
-        </div>
 
-        <p>
-          Ao criar uma conta, você concorda com nossos termos{" "}
-          <a href="#" style={{ color: "dodgerblue" }}>
-            Termos & Política de Privacidade
-          </a>.
-        </p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+            <div>
+              <label htmlFor="senha">Senha</label>
+              <input
+                type="password"
+                name="senha"
+                placeholder="••••••••"
+                value={formData.senha}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="senhaRepeat">Confirmar</label>
+              <input
+                type="password"
+                value={senhaRepeat}
+                onChange={(e) => setSenhaRepeat(e.target.value)}
+                placeholder="••••••••"
+                required
+              />
+            </div>
+          </div>
 
-        <div className="clearfix">
-          <button typeCheck="button" className="cancelarbtn" onClick={() => navigate('/')}>
-            Cancelar
-          </button>
-          
-          <button type="submit" className="cadastrarbtn">Cadastrar</button>
-        </div>
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              style={{ flex: 1 }}
+              onClick={() => navigate('/')}
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}
+              disabled={loading}
+            >
+              {loading ? 'Criando...' : <>Cadastrar <UserPlus size={18} /></>}
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }
