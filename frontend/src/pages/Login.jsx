@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../services/api';
-import { User, Lock, LogIn } from 'lucide-react'; // Assuming lucide-react is available or will be added
+import { User, Lock, LogIn } from 'lucide-react';
 
 export function Login() {
   const navigate = useNavigate();
