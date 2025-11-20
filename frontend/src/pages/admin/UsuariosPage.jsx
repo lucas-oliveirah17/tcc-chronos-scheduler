@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usuarioService } from '../../services/usuarioService';
-import { TabelaModular } from '../../components/TabelaModular'; 
+import { TabelaModular } from '../../components/TabelaModular';
 
 export function UsuariosPage() {
   const [usuarios, setUsuarios] = useState([]);
@@ -20,10 +20,11 @@ export function UsuariosPage() {
       }
     };
     fetchUsuarios();
-  }, []); 
+  }, []);
 
   const handleEdit = (id) => {
-    navigate(`/admin/usuarios/editar/${id}`);
+    const usuarioToEdit = usuarios.find(u => u.id === id);
+    navigate(`/admin/usuarios/editar/${id}`, { state: { usuario: usuarioToEdit } });
   };
 
   const handleDelete = async (id) => {
@@ -37,7 +38,7 @@ export function UsuariosPage() {
       }
     }
   };
-  
+
   const colunasMapeadas = {
     'Nome': 'nome',
     'Email': 'email',
@@ -55,12 +56,12 @@ export function UsuariosPage() {
       <button onClick={() => navigate('/admin/usuarios/novo')} className="btn-adicionar">
         Adicionar Novo Usuário
       </button>
-      <TabelaModular 
+      <TabelaModular
         colunasMapeadas={colunasMapeadas}
-        dados={usuarios} 
-        onEdit={handleEdit} 
+        dados={usuarios}
+        onEdit={handleEdit}
         onDelete={handleDelete}
-      /> 
+      />
     </div>
   );
 }

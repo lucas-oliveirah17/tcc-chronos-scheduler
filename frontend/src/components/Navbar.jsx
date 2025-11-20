@@ -51,7 +51,6 @@ export function Navbar() {
               </button>
               <div className="dropdown-content">
                 <NavLink to="/admin/clientes">Listar</NavLink>
-                {/* O cadastro de cliente é o fluxo normal de usuário */}
               </div>
             </div>
 

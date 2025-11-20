@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { usuarioService } from '../../services/usuarioService';
 import { UsuarioForm } from '../../components/UsuarioForm';
 
@@ -7,19 +7,24 @@ export function UsuarioEditPage() {
   const [usuario, setUsuario] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    const fetchUsuario = async () => {
-      try {
-        const data = await usuarioService.getUsuarioById(id);
-        setUsuario(data);
-      } catch (error) {
-        console.error("Erro ao buscar usuário:", error);
-        navigate('/admin/usuarios');
-      }
-    };
-    fetchUsuario();
-  }, [id, navigate]);
+    if (location.state && location.state.usuario) {
+      setUsuario(location.state.usuario);
+    } else {
+      const fetchUsuario = async () => {
+        try {
+          const data = await usuarioService.getUsuarioById(id);
+          setUsuario(data);
+        } catch (error) {
+          console.error("Erro ao buscar usuário:", error);
+          navigate('/admin/usuarios');
+        }
+      };
+      fetchUsuario();
+    }
+  }, [id, navigate, location.state]);
 
   const handleUpdate = async (formData) => {
     try {
@@ -38,10 +43,10 @@ export function UsuarioEditPage() {
   return (
     <div className="admin-page-container">
       <h2>Editar Usuário: {usuario.nome}</h2>
-      <UsuarioForm 
-        onSubmit={handleUpdate} 
-        dadosIniciais={usuario} 
-        isEdit={true} 
+      <UsuarioForm
+        onSubmit={handleUpdate}
+        dadosIniciais={usuario}
+        isEdit={true}
       />
     </div>
   );

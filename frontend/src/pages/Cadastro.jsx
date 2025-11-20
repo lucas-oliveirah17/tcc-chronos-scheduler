@@ -44,14 +44,14 @@ export function Cadastro() {
         perfil: 'CLIENTE' // Perfil fixo para cadastro de cliente
       };
 
-      await api.post('/api/usuarios', dadosParaEnviar);
+      await api.post('/usuarios', dadosParaEnviar);
 
       alert('Cadastro realizado com sucesso! Você será redirecionado para o login.')
       navigate('/login');
 
     } catch (error) {
       console.error('Erro ao cadastrar:', error);
-      if(error.response && error.response.data) {
+      if (error.response && error.response.data) {
         alert(`Erro: ${error.response.data}`);
       } else {
         alert('Ocorreu um erro ao tentar cadastrar.')
@@ -70,34 +70,34 @@ export function Cadastro() {
           {/* Coluna Esquerda */}
           <div>
             <label htmlFor="nome"><b>Nome</b></label>
-            <input 
-              type="text" 
-              placeholder="Digite o seu nome" 
-              name="nome" 
-              id="nome" 
-              value={formData.nome} 
-              onChange={handleChange} 
-              required 
+            <input
+              type="text"
+              placeholder="Digite o seu nome"
+              name="nome"
+              id="nome"
+              value={formData.nome}
+              onChange={handleChange}
+              required
             />
 
             <label htmlFor="senha"><b>Senha</b></label>
-            <input 
-              type="password" 
-              placeholder="Digite a sua senha" 
-              name="senha" 
-              id="senha" 
-              value={formData.senha} 
-              onChange={handleChange} 
-              required 
+            <input
+              type="password"
+              placeholder="Digite a sua senha"
+              name="senha"
+              id="senha"
+              value={formData.senha}
+              onChange={handleChange}
+              required
             />
 
             <label htmlFor="telefone"><b>Telefone</b></label>
-            <input 
-              type="tel" 
-              placeholder="Digite o seu telefone" 
-              name="telefone" 
-              id="telefone" 
-              value={formData.telefone} 
+            <input
+              type="tel"
+              placeholder="Digite o seu telefone"
+              name="telefone"
+              id="telefone"
+              value={formData.telefone}
               onChange={handleChange}
               required
             />
@@ -106,24 +106,24 @@ export function Cadastro() {
           {/* Coluna Direita */}
           <div>
             <label htmlFor="email"><b>E-mail</b></label>
-            <input 
-              type="email" 
-              placeholder="Digite o seu e-mail" 
-              name="email" 
-              value={formData.email} 
-              id="email" 
-              onChange={handleChange} 
-              required 
+            <input
+              type="email"
+              placeholder="Digite o seu e-mail"
+              name="email"
+              value={formData.email}
+              id="email"
+              onChange={handleChange}
+              required
             />
 
             <label htmlFor="senha-repeat"><b>Repita a senha</b></label>
-            <input 
-             type="password" 
-             placeholder="Digite novamente a sua senha" 
-             name="senha-repeat" 
-             id="senha-repeat" 
-             onChange={(e) => setSenhaRepeat(e.target.value)} 
-             required 
+            <input
+              type="password"
+              placeholder="Digite novamente a sua senha"
+              name="senha-repeat"
+              id="senha-repeat"
+              onChange={(e) => setSenhaRepeat(e.target.value)}
+              required
             />
           </div>
         </div>
@@ -139,7 +139,7 @@ export function Cadastro() {
           <button typeCheck="button" className="cancelarbtn" onClick={() => navigate('/')}>
             Cancelar
           </button>
-          
+
           <button type="submit" className="cadastrarbtn">Cadastrar</button>
         </div>
       </div>

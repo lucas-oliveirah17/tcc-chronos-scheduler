@@ -5,7 +5,7 @@ import './Login.css';
 
 export function Login() {
   const navigate = useNavigate();
-  
+
   // State para guardar os dados do formulário
   const [formData, setFormData] = useState({
     email: '',
@@ -30,7 +30,7 @@ export function Login() {
         senha: formData.senha
       };
 
-      const response = await api.post('/api/auth/login', dadosParaEnviar);
+      const response = await api.post('/auth/login', dadosParaEnviar);
       const data = response.data;
 
       // Armazena o token JWT no localStorage
@@ -47,8 +47,8 @@ export function Login() {
 
     } catch (error) {
       console.error("Error ao logar:", error);
-      if(error.response && error.response.data) {
-        alert(`Erro: ${error.response.data}`)  
+      if (error.response && error.response.data) {
+        alert(`Erro: ${error.response.data}`)
       }
       alert("Ocorreu um erro ao tentar logar.");
     }
@@ -85,22 +85,22 @@ export function Login() {
               </div>
 
               <input
-                type="email" 
-                placeholder="Digite o seu e-mail" 
-                name="email" 
-                id="email" 
-                value={formData.email} 
-                onChange={handleChange} 
+                type="email"
+                placeholder="Digite o seu e-mail"
+                name="email"
+                id="email"
+                value={formData.email}
+                onChange={handleChange}
                 required
               />
               <input
-                type="password" 
-                placeholder="Digite a sua senha" 
-                name="senha" 
-                id="senha" 
-                value={formData.senha} 
-                onChange={handleChange} 
-                requireda
+                type="password"
+                placeholder="Digite a sua senha"
+                name="senha"
+                id="senha"
+                value={formData.senha}
+                onChange={handleChange}
+                required
               />
               <button type="submit" className="loginbtn">Login</button>
             </div>

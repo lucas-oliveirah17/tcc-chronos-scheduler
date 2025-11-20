@@ -31,10 +31,10 @@ export function UsuarioForm({ dadosIniciais = {}, onSubmit, isEdit = false }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (isEdit) {
-      const { nome, email, telefone } = formData;
-      onSubmit({ nome, email, telefone });
+      const { nome, email, telefone, perfil } = formData;
+      onSubmit({ nome, email, telefone, perfil });
     } else {
       onSubmit(formData);
     }
@@ -74,7 +74,7 @@ export function UsuarioForm({ dadosIniciais = {}, onSubmit, isEdit = false }) {
           onChange={handleChange}
         />
       </div>
-      
+
       {!isEdit && (
         <>
           <div className="form-group">
