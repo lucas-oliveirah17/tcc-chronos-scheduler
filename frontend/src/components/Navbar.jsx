@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Menu, X, Home, Calendar, Users, User, Scissors, LogOut, ChevronDown } from 'lucide-react';
+import { Menu, X, Home, Calendar, ShoppingBag, UserCog, Briefcase, Scissors, LogOut, Users, IdCardLanyard } from 'lucide-react';
 import './Navbar.css';
 
 export function Navbar() {
@@ -55,7 +55,7 @@ export function Navbar() {
                 </NavLink>
 
                 <NavLink to="/admin/profissionais" className="nav-item" onClick={() => setMenuOpen(false)}>
-                  <User size={18} /> Profissionais
+                  <IdCardLanyard size={18} /> Profissionais
                 </NavLink>
 
                 <NavLink to="/admin/servicos" className="nav-item" onClick={() => setMenuOpen(false)}>
@@ -63,7 +63,7 @@ export function Navbar() {
                 </NavLink>
 
                 <NavLink to="/admin/usuarios" className="nav-item" onClick={() => setMenuOpen(false)}>
-                  <Users size={18} /> Usuários
+                  <UserCog size={18} /> Usuários
                 </NavLink>
               </div>
             </>
