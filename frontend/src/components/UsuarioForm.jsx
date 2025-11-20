@@ -34,7 +34,11 @@ export function UsuarioForm({ dadosIniciais = {}, onSubmit, isEdit = false }) {
 
     if (isEdit) {
       const { nome, email, telefone, perfil } = formData;
-      onSubmit({ nome, email, telefone, perfil });
+      const payload = { nome, email, telefone, perfil };
+      if (dadosIniciais.id) {
+        payload.id = dadosIniciais.id;
+      }
+      onSubmit(payload);
     } else {
       onSubmit(formData);
     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usuarioService } from '../../services/usuarioService';
-import { TabelaModular } from '../../components/TabelaModular'; 
+import { TabelaModular } from '../../components/TabelaModular';
 
 export function ClientesPage() {
   const [clientes, setClientes] = useState([]);
@@ -11,8 +11,11 @@ export function ClientesPage() {
   useEffect(() => {
     const fetchClientes = async () => {
       try {
-        const data = await usuarioService.getAllClientes();
-        setClientes(data || []);
+        // Assumindo que existe um endpoint ou filtro para clientes
+        // Se não houver, filtramos no front:
+        const todosUsuarios = await usuarioService.getAllUsuarios();
+        const apenasClientes = todosUsuarios.filter(u => u.perfil === 'CLIENTE');
+        setClientes(apenasClientes);
       } catch (error) {
         console.error("Erro ao buscar clientes:", error);
       } finally {
@@ -20,24 +23,22 @@ export function ClientesPage() {
       }
     };
     fetchClientes();
-  }, []); 
+  }, []);
 
-  const handleEdit = (id) => {
-    navigate(`/admin/clientes/editar/${id}`);
-  };
+  const handleEdit = (id) => navigate(`/admin/clientes/editar/${id}`);
 
   const handleDelete = async (id) => {
-    if (window.confirm("Tem certeza que deseja deletar este cliente?")) {
+    if (window.confirm('Tem certeza que deseja excluir este cliente?')) {
       try {
         await usuarioService.deleteUsuario(id);
         setClientes(clientes.filter(c => c.id !== id));
       } catch (error) {
-        console.error("Erro ao deletar cliente:", error);
-        alert("Falha ao deletar cliente.");
+        console.error("Erro ao excluir cliente:", error);
+        alert('Erro ao excluir cliente');
       }
     }
   };
-  
+
   const colunasMapeadas = {
     'Nome': 'nome',
     'Email': 'email',
@@ -45,19 +46,21 @@ export function ClientesPage() {
   };
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div className="admin-page-container"><p>Carregando...</p></div>;
   }
 
   return (
     <div className="admin-page-container">
-      <h2>Gestão de Clientes</h2>
-      {/* Não há botão de "Adicionar", pois o cadastro é público */}
-      <TabelaModular 
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <h2 style={{ margin: 0 }}>Gestão de Clientes</h2>
+        {/* Botão de adicionar cliente se necessário */}
+      </div>
+      <TabelaModular
         colunasMapeadas={colunasMapeadas}
-        dados={clientes} 
-        onEdit={handleEdit} 
+        dados={clientes}
+        onEdit={handleEdit}
         onDelete={handleDelete}
-      /> 
+      />
     </div>
   );
 }

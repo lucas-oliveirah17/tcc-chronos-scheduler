@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usuarioService } from '../../services/usuarioService';
 import { TabelaModular } from '../../components/TabelaModular';
+import { Plus } from 'lucide-react';
 
 export function UsuariosPage() {
   const [usuarios, setUsuarios] = useState([]);
@@ -47,15 +48,18 @@ export function UsuariosPage() {
   };
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div className="admin-page-container"><p>Carregando...</p></div>;
   }
 
   return (
     <div className="admin-page-container">
-      <h2>Gestão de Usuários</h2>
-      <button onClick={() => navigate('/admin/usuarios/novo')} className="btn-adicionar">
-        Adicionar Novo Usuário
-      </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <h2 style={{ margin: 0 }}>Gestão de Usuários</h2>
+        <button onClick={() => navigate('/admin/usuarios/novo')} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Plus size={18} /> Novo Usuário
+        </button>
+      </div>
+
       <TabelaModular
         colunasMapeadas={colunasMapeadas}
         dados={usuarios}

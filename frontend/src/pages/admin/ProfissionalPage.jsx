@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { profissionalService } from '../../services/profissionalService';
-import { TabelaModular } from '../../components/TabelaModular'; 
+import { TabelaModular } from '../../components/TabelaModular';
+import { Plus } from 'lucide-react';
 
 export function ProfissionaisPage() {
   const [profissionais, setProfissionais] = useState([]);
@@ -12,7 +13,7 @@ export function ProfissionaisPage() {
     const fetchProfissionais = async () => {
       try {
         const data = await profissionalService.getAllProfissionais();
-        setProfissionais(data || []); // Garante que é um array
+        setProfissionais(data || []);
       } catch (error) {
         console.error("Erro ao buscar profissionais:", error);
       } finally {
@@ -20,7 +21,7 @@ export function ProfissionaisPage() {
       }
     };
     fetchProfissionais();
-  }, []); 
+  }, []);
 
   const handleEdit = (id) => {
     navigate(`/admin/profissionais/editar/${id}`);
@@ -37,43 +38,38 @@ export function ProfissionaisPage() {
       }
     }
   };
-  
+
   const colunasMapeadas = {
     'Nome': 'nome',
     'Email': 'email',
     'Especialidades': 'especialidades'
   };
-  
-  // ==================================================
-  //           MUDANÇA ESTÁ AQUI
-  // ==================================================
+
   const dadosFormatados = profissionais.map(p => ({
     id: p.id,
-    
-    // Verifica se p.usuario existe antes de tentar acessar .nome ou .email
     nome: p.usuario?.nome || 'Usuário Inválido',
     email: p.usuario?.email || 'N/A',
-    
     especialidades: p.especialidades || 'N/A'
   }));
-  // ==================================================
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div className="admin-page-container"><p>Carregando...</p></div>;
   }
 
   return (
     <div className="admin-page-container">
-      <h2>Gestão de Profissionais</h2>
-      <button onClick={() => navigate('/admin/profissionais/novo')} className="btn-adicionar">
-        Adicionar Novo Profissional
-      </button>
-      <TabelaModular 
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <h2 style={{ margin: 0 }}>Gestão de Profissionais</h2>
+        <button onClick={() => navigate('/admin/profissionais/novo')} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Plus size={18} /> Novo Profissional
+        </button>
+      </div>
+      <TabelaModular
         colunasMapeadas={colunasMapeadas}
-        dados={dadosFormatados} 
-        onEdit={handleEdit} 
+        dados={dadosFormatados}
+        onEdit={handleEdit}
         onDelete={handleDelete}
-      /> 
+      />
     </div>
   );
 }

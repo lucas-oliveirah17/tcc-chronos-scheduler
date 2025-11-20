@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { agendamentoService } from '../../services/agendamentoService';
-import { TabelaModular } from '../../components/TabelaModular'; 
+import { TabelaModular } from '../../components/TabelaModular';
+import { Plus } from 'lucide-react';
 
 export function AgendamentosPage() {
   const [agendamentos, setAgendamentos] = useState([]);
@@ -20,7 +21,7 @@ export function AgendamentosPage() {
       }
     };
     fetchAgendamentos();
-  }, []); 
+  }, []);
 
   const handleEdit = (id) => {
     navigate(`/admin/agendamentos/editar/${id}`);
@@ -37,7 +38,7 @@ export function AgendamentosPage() {
       }
     }
   };
-  
+
   const colunasMapeadas = {
     'Cliente': 'clienteNome',
     'Profissional': 'profissionalNome',
@@ -45,7 +46,7 @@ export function AgendamentosPage() {
     'Início': 'dataHoraInicio',
     'Status': 'status'
   };
-  
+
   const formatDataHora = (isoString) => {
     if (!isoString) return 'N/A';
     try {
@@ -66,21 +67,23 @@ export function AgendamentosPage() {
   }));
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div className="admin-page-container"><p>Carregando...</p></div>;
   }
 
   return (
     <div className="admin-page-container">
-      <h2>Gestão de Agendamentos</h2>
-      <button onClick={() => navigate('/admin/agendamentos/novo')} className="btn-adicionar">
-        Novo Agendamento
-      </button>
-      <TabelaModular 
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <h2 style={{ margin: 0 }}>Gestão de Agendamentos</h2>
+        <button onClick={() => navigate('/admin/agendamentos/novo')} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Plus size={18} /> Novo Agendamento
+        </button>
+      </div>
+      <TabelaModular
         colunasMapeadas={colunasMapeadas}
-        dados={dadosFormatados} 
-        onEdit={handleEdit} 
+        dados={dadosFormatados}
+        onEdit={handleEdit}
         onDelete={handleDelete}
-      /> 
+      />
     </div>
   );
 }
