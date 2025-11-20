@@ -18,7 +18,10 @@ export function Login() {
     setLoading(true);
     try {
       const response = await api.post('/auth/login', formData);
+    
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("usuario", JSON.stringify(response.data.usuario));
+
       window.dispatchEvent(new Event("authChange"));
       navigate("/");
     } catch (error) {
