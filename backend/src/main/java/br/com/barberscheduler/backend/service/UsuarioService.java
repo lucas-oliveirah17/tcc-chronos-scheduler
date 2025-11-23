@@ -96,6 +96,10 @@ public class UsuarioService {
             usuarioExistente.setTelefone(dto.getTelefone());
         }
         
+        if(dto.getPerfil() != null) {
+            usuarioExistente.setPerfil(dto.getPerfil());
+        }
+        
         Usuario usuarioAtualizado = usuarioRepository.save(usuarioExistente);
         
         return new UsuarioDTO(usuarioAtualizado);

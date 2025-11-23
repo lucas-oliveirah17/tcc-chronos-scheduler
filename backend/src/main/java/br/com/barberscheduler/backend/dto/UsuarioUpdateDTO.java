@@ -1,11 +1,14 @@
 package br.com.barberscheduler.backend.dto;
 
+import br.com.barberscheduler.backend.model.enums.PerfilUsuario;
+
 // DTO para RECEBER dados ao atualizar um Usuario
 public class UsuarioUpdateDTO {
     
     private String nome;
     private String email;
     private String telefone;
+    private PerfilUsuario perfil;
     
     public UsuarioUpdateDTO() {        
     }
@@ -32,5 +35,13 @@ public class UsuarioUpdateDTO {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public PerfilUsuario getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(PerfilUsuario perfil) {
+        this.perfil = perfil;
     }  
 }
