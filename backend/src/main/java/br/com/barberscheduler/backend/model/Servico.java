@@ -2,8 +2,10 @@ package br.com.barberscheduler.backend.model;
 
 import java.math.BigDecimal;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +17,14 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "servicos")
 @SQLDelete(sql = "UPDATE servicos SET ativo = false WHERE id = ?")
-@SQLRestriction("ativo = true")
+@FilterDef(
+        name = "servicoAtivo",
+        parameters = @ParamDef(name = "ativo", type = Boolean.class)
+    )
+@Filter(
+    name = "servicoAtivo",
+    condition = "ativo = :ativo"
+)
 public class Servico {
     
     @Id

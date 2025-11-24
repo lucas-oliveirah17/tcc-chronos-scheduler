@@ -13,22 +13,27 @@ import br.com.barberscheduler.backend.dto.UsuarioUpdateDTO;
 import br.com.barberscheduler.backend.model.Usuario;
 import br.com.barberscheduler.backend.repository.UsuarioRepository;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class UsuarioService {
+public class UsuarioService extends BaseService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final String filtro = "usuarioAtivo";
     
     public UsuarioService(
             UsuarioRepository usuarioRepository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            EntityManager entityManager) {
+        super(entityManager);
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
     }
-    
+        
     @Transactional(readOnly = true)
     public Usuario findEntidadeById(Long id) {
+        enableFilter(filtro);
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Usuário de ID " + id + " não encontrado ou inativo.") );
@@ -36,6 +41,7 @@ public class UsuarioService {
     
     @Transactional(readOnly = true)
     public List<UsuarioDTO> listarTodos() {
+        enableFilter(filtro);
         return usuarioRepository.findAll()
                 .stream()
                 .map(UsuarioDTO::new)
@@ -44,6 +50,7 @@ public class UsuarioService {
     
     @Transactional(readOnly = true)
     public UsuarioDTO buscarPorId(Long id) {
+        enableFilter(filtro);
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Usuário de ID " + id + " não encontrado ou inativo."));
@@ -53,6 +60,7 @@ public class UsuarioService {
     
     @Transactional
     public UsuarioDTO criar(UsuarioCreateDTO dto) {   
+        disableFilter(filtro);
         if(usuarioRepository.existsByEmailRegardlessOfStatus(dto.getEmail())) {
             throw new IllegalArgumentException(
                     "O e-mail " + dto.getEmail() + " já está cadastrado.");
@@ -74,17 +82,17 @@ public class UsuarioService {
     
     @Transactional
     public UsuarioDTO atualizar(Long id, UsuarioUpdateDTO dto) {
-        Usuario usuarioExistente = usuarioRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Usuário de ID " + id + " não encontrado ou inativo."));
+        Usuario usuarioExistente = findEntidadeById(id);
         
         if(dto.getEmail() != null && 
                 !dto.getEmail().equals(usuarioExistente.getEmail())) {
+            
             usuarioRepository.findByEmailRegardlessOfStatus(dto.getEmail())
                 .ifPresent(u -> {
                     throw new IllegalArgumentException(
                             "O e-mail " + dto.getEmail() + " já está cadastrado.");
                     });
+            
             usuarioExistente.setEmail(dto.getEmail());
         }
         
@@ -107,6 +115,7 @@ public class UsuarioService {
     
     @Transactional
     public void deletar(Long id) {
+        enableFilter(filtro);
         if(!usuarioRepository.existsById(id)) {
             throw new EntityNotFoundException(
                     "Usuário de ID " + id + " não encontrado ou inativo.");

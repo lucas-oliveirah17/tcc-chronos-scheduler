@@ -16,22 +16,25 @@ import br.com.barberscheduler.backend.model.Usuario;
 import br.com.barberscheduler.backend.model.enums.PerfilUsuario;
 import br.com.barberscheduler.backend.model.enums.StatusAgendamento;
 import br.com.barberscheduler.backend.repository.AgendamentoRepository;
-
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class AgendamentoService {
+public class AgendamentoService extends BaseService {
     
     private final AgendamentoRepository agendamentoRepository;
     private final UsuarioService usuarioService;
     private final ProfissionalService profissionalService;
     private final ServicoService servicoService;
+    private final String filtro = "agendamentoAtivo";
     
     public AgendamentoService(
             AgendamentoRepository agendamentoRepository,
             UsuarioService usuarioService,
             ProfissionalService profissionalService,
-            ServicoService servicoService) {
+            ServicoService servicoService,
+            EntityManager entityManager) {
+        super(entityManager);
         this.agendamentoRepository = agendamentoRepository;
         this.usuarioService = usuarioService;
         this.profissionalService = profissionalService;
@@ -40,6 +43,7 @@ public class AgendamentoService {
         
     @Transactional(readOnly = true)
     public List<AgendamentoDTO> listarTodos() {
+        enableFilter(filtro);
         return agendamentoRepository.findAll()
                 .stream()
                 .map(AgendamentoDTO::new)
@@ -48,6 +52,7 @@ public class AgendamentoService {
     
     @Transactional(readOnly = true)
     public AgendamentoDTO buscarPorId(Long id) {
+        enableFilter(filtro);
         Agendamento agendamento = agendamentoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Agendamento de ID " + id + " não encontrado ou inativo."));
@@ -57,6 +62,7 @@ public class AgendamentoService {
     
     @Transactional
     public AgendamentoDTO criar(AgendamentoRequestDTO dto) {
+        disableFilter(filtro);
         Usuario cliente = usuarioService.findEntidadeById(dto.getClienteId());
         Profissional profissional = profissionalService.findEntidadeById(dto.getProfissionalId());
         Servico servico = servicoService.findEntidadeById(dto.getServicoId());
@@ -92,6 +98,7 @@ public class AgendamentoService {
     
     @Transactional
     public void deletar(Long id) {
+        enableFilter(filtro);
         if(!agendamentoRepository.existsById(id)) {
             throw new EntityNotFoundException(
                     "Agendamento de ID " + id + " não encontrado ou inativo.");

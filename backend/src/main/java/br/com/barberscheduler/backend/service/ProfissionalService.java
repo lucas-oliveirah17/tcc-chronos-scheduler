@@ -12,23 +12,27 @@ import br.com.barberscheduler.backend.model.Profissional;
 import br.com.barberscheduler.backend.model.Usuario;
 import br.com.barberscheduler.backend.model.enums.PerfilUsuario;
 import br.com.barberscheduler.backend.repository.ProfissionalRepository;
-
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class ProfissionalService {
+public class ProfissionalService extends BaseService {
     private final ProfissionalRepository profissionalRepository;
     private final UsuarioService usuarioService;
-    
+    private final String filtro = "profissionalAtivo";
+
     public ProfissionalService(
             ProfissionalRepository profissionalRepository, 
-            UsuarioService usuarioService) {
+            UsuarioService usuarioService,
+            EntityManager entityManager) {
+        super(entityManager);
         this.profissionalRepository = profissionalRepository;
         this.usuarioService = usuarioService;
     }
     
     @Transactional(readOnly = true)
     public Profissional findEntidadeById(Long id) {
+        enableFilter(filtro);
         return profissionalRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Profissional de ID " + id + " não encontrado ou inativo.") );
@@ -38,7 +42,8 @@ public class ProfissionalService {
     // ou seja, se uma das consultas falharem, ele faz o rollback de todas as alterações
     // que fez nesta tentativa.
     @Transactional(readOnly = true)
-    public List<ProfissionalDTO> listarTodos() {      
+    public List<ProfissionalDTO> listarTodos() {
+        enableFilter(filtro);
         return profissionalRepository.findAll()
                 .stream()
                 .map(ProfissionalDTO::new)
@@ -47,6 +52,7 @@ public class ProfissionalService {
     
     @Transactional(readOnly = true)
     public ProfissionalDTO buscarPorId(Long id) {
+        enableFilter(filtro);
         Profissional profissional = profissionalRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Profissional de ID " + id + " não encontrado ou inativo."));
@@ -56,6 +62,7 @@ public class ProfissionalService {
     
     @Transactional
     public ProfissionalDTO criar(ProfissionalRequestDTO dto) {
+        disableFilter(filtro);
         if(dto.getUsuarioId() == null) {
             throw new IllegalArgumentException(
                     "O ID do usuário é obrigatório para criar um profissional.");
@@ -84,9 +91,7 @@ public class ProfissionalService {
     
     @Transactional
     public ProfissionalDTO atualizar(Long id, ProfissionalRequestDTO dto) {
-        Profissional profissionalExistente = profissionalRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Profissional de ID " + id + " não encontrado ou inativo."));
+        Profissional profissionalExistente = findEntidadeById(id);
         
         if(dto.getEspecialidades() != null) {
             profissionalExistente.setEspecialidades(dto.getEspecialidades());
@@ -117,6 +122,7 @@ public class ProfissionalService {
     
     @Transactional
     public void deletar(Long id) {
+        enableFilter(filtro);
         Profissional profissionalParaDeletar = profissionalRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Profissional de ID " + id + " não encontrado ou inativo."));
