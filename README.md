@@ -128,6 +128,7 @@ cd tcc-barber-scheduler
 DB_USER=barber_admin
 DB_PASS=sua_senha_aqui
 DB_NAME=barber_db
+DB_PORT=5432:5432
 ```
 
 **b. Para o Spring Boot (Aplicação Java):**
