@@ -10,7 +10,7 @@ export function ServicoCreatePage() {
     nome: '',
     descricao: '',
     preco: '',
-    duracao: ''
+    duracaoMinutos: ''
   });
 
   const handleChange = (e) => {
@@ -25,7 +25,7 @@ export function ServicoCreatePage() {
       const payload = {
         ...formData,
         preco: parseFloat(formData.preco),
-        duracao: parseInt(formData.duracao, 10)
+        duracaoMinutos: parseInt(formData.duracaoMinutos, 10)
       };
       await servicoService.createServico(payload);
       alert('Serviço criado com sucesso!');
@@ -116,16 +116,16 @@ export function ServicoCreatePage() {
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
-            <label htmlFor="duracao" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <label htmlFor="duracaoMinutos" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
               <Clock size={16} />
               Duração (minutos)
             </label>
             <input
               type="number"
-              id="duracao"
-              name="duracao"
+              id="duracaoMinutos"
+              name="duracaoMinutos"
               placeholder="Ex: 30, 60..."
-              value={formData.duracao}
+              value={formData.duracaoMinutos}
               onChange={handleChange}
               min="1"
               required
