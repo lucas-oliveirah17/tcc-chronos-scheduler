@@ -40,6 +40,7 @@ export function ProfissionaisPage() {
   };
 
   const colunasMapeadas = {
+    'ID': 'id',
     'Nome': 'nome',
     'Email': 'email',
     'Especialidades': 'especialidades'

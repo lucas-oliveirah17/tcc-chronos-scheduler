@@ -40,6 +40,7 @@ export function ServicosPage() {
   };
 
   const colunasMapeadas = {
+    'ID': 'id',
     'Nome': 'nome',
     'Descrição': 'descricao',
     'Duração': 'duracaoMinutos',

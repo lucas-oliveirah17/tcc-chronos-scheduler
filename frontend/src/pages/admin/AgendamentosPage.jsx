@@ -23,9 +23,7 @@ export function AgendamentosPage() {
     fetchAgendamentos();
   }, []);
 
-  const handleEdit = (id) => {
-    navigate(`/admin/agendamentos/editar/${id}`);
-  };
+
 
   const handleDelete = async (id) => {
     if (window.confirm("Tem certeza que deseja cancelar/deletar este agendamento?")) {
@@ -40,6 +38,7 @@ export function AgendamentosPage() {
   };
 
   const colunasMapeadas = {
+    'ID': 'id',
     'Cliente': 'clienteNome',
     'Profissional': 'profissionalNome',
     'Serviço': 'servicoNome',
@@ -81,7 +80,6 @@ export function AgendamentosPage() {
       <TabelaModular
         colunasMapeadas={colunasMapeadas}
         dados={dadosFormatados}
-        onEdit={handleEdit}
         onDelete={handleDelete}
       />
     </div>

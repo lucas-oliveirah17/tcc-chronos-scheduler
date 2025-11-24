@@ -16,6 +16,7 @@ export function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
     window.dispatchEvent(new Event("authChange"));
     navigate("/login");
     setMenuOpen(false);

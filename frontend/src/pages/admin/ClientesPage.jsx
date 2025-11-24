@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usuarioService } from '../../services/usuarioService';
 import { TabelaModular } from '../../components/TabelaModular';
+import { Plus } from 'lucide-react';
 
 export function ClientesPage() {
   const [clientes, setClientes] = useState([]);
@@ -40,6 +41,7 @@ export function ClientesPage() {
   };
 
   const colunasMapeadas = {
+    'ID': 'id',
     'Nome': 'nome',
     'Email': 'email',
     'Telefone': 'telefone'
@@ -53,7 +55,9 @@ export function ClientesPage() {
     <div className="admin-page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h2 style={{ margin: 0 }}>Gestão de Clientes</h2>
-        {/* Botão de adicionar cliente se necessário */}
+        <button onClick={() => navigate('/admin/clientes/novo')} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Plus size={18} /> Novo Cliente
+        </button>
       </div>
       <TabelaModular
         colunasMapeadas={colunasMapeadas}

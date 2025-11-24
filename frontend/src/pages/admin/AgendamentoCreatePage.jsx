@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { agendamentoService } from '../../services/agendamentoService';
-import { usuarioService } from '../../services/usuarioService';
+
 import { profissionalService } from '../../services/profissionalService';
 import { servicoService } from '../../services/servicoService';
 import { Calendar, Clock, ShoppingBag, Briefcase, Scissors, Plus, ArrowLeft } from 'lucide-react';
@@ -9,29 +9,26 @@ import { Calendar, Clock, ShoppingBag, Briefcase, Scissors, Plus, ArrowLeft } fr
 export function AgendamentoCreatePage() {
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
-  const [clientes, setClientes] = useState([]);
+
   const [profissionais, setProfissionais] = useState([]);
   const [servicos, setServicos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
-    dataHora: '',
+    dataHoraInicio: '',
     clienteId: '',
     profissionalId: '',
-    servicoId: '',
-    status: 'PENDENTE'
+    servicoId: ''
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [clientesData, profissionaisData, servicosData] = await Promise.all([
-          usuarioService.getAllUsuarios(),
+        const [profissionaisData, servicosData] = await Promise.all([
           profissionalService.getAllProfissionais(),
           servicoService.getAllServicos()
         ]);
 
-        setClientes(clientesData.filter(u => u.perfil === 'CLIENTE'));
         setProfissionais(profissionaisData);
         setServicos(servicosData);
       } catch (error) {
@@ -53,12 +50,29 @@ export function AgendamentoCreatePage() {
     e.preventDefault();
     setSaving(true);
     try {
+      // Ensure seconds are included in the timestamp
+      const dataHoraFormatted = formData.dataHoraInicio.length === 16
+        ? `${formData.dataHoraInicio}:00`
+        : formData.dataHoraInicio;
+
+      const clienteIdInt = parseInt(formData.clienteId, 10);
+      const profissionalIdInt = parseInt(formData.profissionalId, 10);
+      const servicoIdInt = parseInt(formData.servicoId, 10);
+
+      if (isNaN(clienteIdInt) || isNaN(profissionalIdInt) || isNaN(servicoIdInt)) {
+        alert("Por favor, preencha todos os campos corretamente.");
+        setSaving(false);
+        return;
+      }
+
       const payload = {
-        ...formData,
-        clienteId: parseInt(formData.clienteId, 10),
-        profissionalId: parseInt(formData.profissionalId, 10),
-        servicoId: parseInt(formData.servicoId, 10)
+        dataHoraInicio: dataHoraFormatted,
+        clienteId: clienteIdInt,
+        profissionalId: profissionalIdInt,
+        servicoId: servicoIdInt
       };
+
+      console.log("Enviando payload:", JSON.stringify(payload, null, 2));
       await agendamentoService.createAgendamento(payload);
       alert('Agendamento criado com sucesso!');
       navigate('/admin/agendamentos');
@@ -109,15 +123,15 @@ export function AgendamentoCreatePage() {
         {/* Form */}
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1rem' }}>
-            <label htmlFor="dataHora" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <label htmlFor="dataHoraInicio" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
               <Calendar size={16} />
               Data e Hora
             </label>
             <input
               type="datetime-local"
-              id="dataHora"
-              name="dataHora"
-              value={formData.dataHora}
+              id="dataHoraInicio"
+              name="dataHoraInicio"
+              value={formData.dataHoraInicio}
               onChange={handleChange}
               required
             />
@@ -128,20 +142,15 @@ export function AgendamentoCreatePage() {
               <ShoppingBag size={16} />
               Cliente
             </label>
-            <select
+            <input
+              type="number"
               id="clienteId"
               name="clienteId"
+              placeholder="ID do Cliente"
               value={formData.clienteId}
               onChange={handleChange}
               required
-            >
-              <option value="">Selecione um cliente</option>
-              {clientes.map(cliente => (
-                <option key={cliente.id} value={cliente.id}>
-                  {cliente.nome}
-                </option>
-              ))}
-            </select>
+            />
           </div>
 
           <div style={{ marginBottom: '1rem' }}>
@@ -186,24 +195,7 @@ export function AgendamentoCreatePage() {
             </select>
           </div>
 
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label htmlFor="status" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-              <Clock size={16} />
-              Status
-            </label>
-            <select
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              required
-            >
-              <option value="PENDENTE">Pendente</option>
-              <option value="CONFIRMADO">Confirmado</option>
-              <option value="CANCELADO">Cancelado</option>
-              <option value="CONCLUIDO">Concluído</option>
-            </select>
-          </div>
+
 
           <button
             type="submit"
