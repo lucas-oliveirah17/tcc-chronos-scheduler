@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { agendamentoService } from '../../services/agendamentoService';
-
+import { usuarioService } from '../../services/usuarioService';
 import { profissionalService } from '../../services/profissionalService';
 import { servicoService } from '../../services/servicoService';
 import { Calendar, Clock, ShoppingBag, Briefcase, Scissors, Plus, ArrowLeft } from 'lucide-react';
@@ -9,7 +9,7 @@ import { Calendar, Clock, ShoppingBag, Briefcase, Scissors, Plus, ArrowLeft } fr
 export function AgendamentoCreatePage() {
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
-
+  const [clientes, setClientes] = useState([]);
   const [profissionais, setProfissionais] = useState([]);
   const [servicos, setServicos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,11 +24,13 @@ export function AgendamentoCreatePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [profissionaisData, servicosData] = await Promise.all([
+        const [clientesData, profissionaisData, servicosData] = await Promise.all([
+          usuarioService.getAllUsuarios(),
           profissionalService.getAllProfissionais(),
           servicoService.getAllServicos()
         ]);
 
+        setClientes(clientesData.filter(u => u.perfil === 'CLIENTE'));
         setProfissionais(profissionaisData);
         setServicos(servicosData);
       } catch (error) {
@@ -142,15 +144,20 @@ export function AgendamentoCreatePage() {
               <ShoppingBag size={16} />
               Cliente
             </label>
-            <input
-              type="number"
+            <select
               id="clienteId"
               name="clienteId"
-              placeholder="ID do Cliente"
               value={formData.clienteId}
               onChange={handleChange}
               required
-            />
+            >
+              <option value="">Selecione um cliente</option>
+              {clientes.map(cliente => (
+                <option key={cliente.id} value={cliente.id}>
+                  {cliente.nome}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div style={{ marginBottom: '1rem' }}>
