@@ -3,8 +3,10 @@ package br.com.barberscheduler.backend.model;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import br.com.barberscheduler.backend.model.enums.StatusAgendamento;
@@ -24,7 +26,14 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "agendamentos")
 @SQLDelete(sql = "UPDATE agendamentos SET ativo = false WHERE id = ?")
-@SQLRestriction("ativo = true")
+@FilterDef(
+        name = "agendamentoAtivo",
+        parameters = @ParamDef(name = "ativo", type = Boolean.class)
+    )
+@Filter(
+    name = "agendamentoAtivo",
+    condition = "ativo = :ativo"
+)
 public class Agendamento {
     
     @Id

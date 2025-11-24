@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +27,14 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "usuarios")
 @SQLDelete(sql = "UPDATE usuarios SET ativo = false WHERE id = ?")
-@SQLRestriction("ativo = true")
+@FilterDef(
+        name = "usuarioAtivo",
+        parameters = @ParamDef(name = "ativo", type = Boolean.class)
+    )
+@Filter(
+    name = "usuarioAtivo",
+    condition = "ativo = :ativo"
+)
 public class Usuario implements UserDetails {
     private static final long serialVersionUID = 1L;
 

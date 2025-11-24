@@ -10,20 +10,25 @@ import br.com.barberscheduler.backend.dto.ServicoDTO;
 import br.com.barberscheduler.backend.dto.ServicoRequestDTO;
 import br.com.barberscheduler.backend.model.Servico;
 import br.com.barberscheduler.backend.repository.ServicoRepository;
-
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class ServicoService {
+public class ServicoService extends BaseService {
     private final ServicoRepository servicoRepository;
+    private final String filtro = "servicoAtivo";
+
     
     public ServicoService(
-            ServicoRepository servicoRepository) {
+            ServicoRepository servicoRepository,
+            EntityManager entityManager) {
+        super(entityManager);
         this.servicoRepository = servicoRepository;
     }
     
     @Transactional(readOnly = true)
     public Servico findEntidadeById(Long id) {
+        enableFilter(filtro);
         return servicoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Serviço de ID " + id + " não encontrado ou inativo.") );
@@ -31,6 +36,7 @@ public class ServicoService {
     
     @Transactional(readOnly = true)
     public List<ServicoDTO> listarTodos() {
+        enableFilter(filtro);
         return servicoRepository.findAll()
                 .stream()
                 .map(ServicoDTO::new)
@@ -39,6 +45,7 @@ public class ServicoService {
     
     @Transactional(readOnly = true)
     public ServicoDTO buscarPorId(Long id) {
+        enableFilter(filtro);
         Servico servico = servicoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Serviço de ID " + id + " não encontrado ou inativo."));
@@ -48,6 +55,7 @@ public class ServicoService {
     
     @Transactional
     public ServicoDTO criar(ServicoRequestDTO dto) { 
+        disableFilter(filtro);
         if(servicoRepository.existsByNomeRegardlessOfStatus(dto.getNome())) {
             throw new IllegalArgumentException(
                     "O serviço " + dto.getNome() + " já está cadastrado.");
@@ -66,9 +74,7 @@ public class ServicoService {
     
     @Transactional
     public ServicoDTO atualizar(Long id, ServicoRequestDTO dto) {
-        Servico servicoExistente = servicoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Serviço de ID " + id + " não encontrado ou inativo."));
+        Servico servicoExistente = findEntidadeById(id);
            
         if(dto.getNome() != null && 
                 !dto.getNome().equals(servicoExistente.getNome())) {
@@ -99,6 +105,7 @@ public class ServicoService {
     
     @Transactional
     public void deletar(Long id) {
+        enableFilter(filtro);
         if(!servicoRepository.existsById(id)) {
             throw new EntityNotFoundException(
                     "Serviço de ID " + id + " não encontrado ou inativo.");
