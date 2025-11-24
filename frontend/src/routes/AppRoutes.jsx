@@ -1,11 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
-import { Home } from '../pages/Home'; 
-import { Login } from '../pages/Login'; 
-import { Cadastro } from '../pages/Cadastro'; 
+import { Home } from '../pages/Home';
+import { Login } from '../pages/Login';
+import { Cadastro } from '../pages/Cadastro';
 
 import { AgendamentosPage } from '../pages/admin/AgendamentosPage';
 import { AgendamentoCreatePage } from '../pages/admin/AgendamentoCreatePage';
-import { AgendamentoEditPage } from '../pages/admin/AgendamentoEditPage';
 
 import { ServicosPage } from '../pages/admin/ServicosPage';
 import { ServicoCreatePage } from '../pages/admin/ServicoCreatePage';
@@ -20,6 +19,7 @@ import { UsuarioCreatePage } from '../pages/admin/UsuarioCreatePage';
 import { UsuarioEditPage } from '../pages/admin/UsuarioEditPage';
 
 import { ClientesPage } from '../pages/admin/ClientesPage';
+import { ClienteCreatePage } from '../pages/admin/ClienteCreatePage';
 import { ClienteEditPage } from '../pages/admin/ClienteEditPage';
 
 export function AppRoutes() {
@@ -31,8 +31,7 @@ export function AppRoutes() {
 
       <Route path="/admin/agendamentos" element={<AgendamentosPage />} />
       <Route path="/admin/agendamentos/novo" element={<AgendamentoCreatePage />} />
-      <Route path="/admin/agendamentos/editar/:id" element={<AgendamentoEditPage />} />
-      
+
       <Route path="/admin/servicos" element={<ServicosPage />} />
       <Route path="/admin/servicos/novo" element={<ServicoCreatePage />} />
       <Route path="/admin/servicos/editar/:id" element={<ServicoEditPage />} />
@@ -46,6 +45,7 @@ export function AppRoutes() {
       <Route path="/admin/usuarios/editar/:id" element={<UsuarioEditPage />} />
 
       <Route path="/admin/clientes" element={<ClientesPage />} />
+      <Route path="/admin/clientes/novo" element={<ClienteCreatePage />} />
       <Route path="/admin/clientes/editar/:id" element={<ClienteEditPage />} />
 
 

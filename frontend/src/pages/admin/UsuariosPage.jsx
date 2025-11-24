@@ -41,6 +41,7 @@ export function UsuariosPage() {
   };
 
   const colunasMapeadas = {
+    'ID': 'id',
     'Nome': 'nome',
     'Email': 'email',
     'Telefone': 'telefone',
