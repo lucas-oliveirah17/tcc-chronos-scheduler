@@ -1,17 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { profissionalService } from '../../services/profissionalService';
-import { User, Mail, Phone, Briefcase, UserPlus, ArrowLeft } from 'lucide-react';
+import { usuarioService } from '../../services/usuarioService';
+import { User, Briefcase, UserPlus, ArrowLeft} from 'lucide-react';
 
 export function ProfissionalCreatePage() {
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+
+  const [usuariosDisponiveis, setUsuariosDisponiveis] = useState([]);
+  
   const [formData, setFormData] = useState({
-    nome: '',
-    email: '',
-    telefone: '',
-    especialidade: ''
+    usuarioId: '',
+    especialidades: ''
   });
+
+  useEffect(() => {
+    async function loadUsers() {
+      try{
+        const todosUsuarios = await usuarioService.getAllUsuarios();
+
+        const profissionaisExistentes = await profissionalService.getAllProfissionais();
+
+        const idsJaVinculados = new Set(profissionaisExistentes.map(p => p.usuario.id));
+
+        const disponiveis = todosUsuarios.filter(u =>
+          u.perfil === 'PROFISSIONAL' && !idsJaVinculados.has(u.id)
+        );
+
+        setUsuariosDisponiveis(disponiveis);
+
+      } catch(error) {
+        console.error("Erro ao carregar usuários:", error);
+        alert("Erro ao carregar lista de usuários disponíveis.");
+      
+      } finally {
+        setLoadingUsers(false);
+      }
+    }
+    loadUsers();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,14 +49,28 @@ export function ProfissionalCreatePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if(!formData.usuarioId) {
+      alert("Por favor, selecione um usuário.");
+      return;
+    }
+
     setSaving(true);
     try {
-      await profissionalService.createProfissional(formData);
-      alert('Profissional criado com sucesso!');
+      await profissionalService.createProfissional({
+        usuarioId: Number(formData.usuarioId),
+        especialidades: formData.especialidades
+      });
+
+      alert('Profissional vinculado com sucesso!');
       navigate('/admin/profissionais');
+
     } catch (error) {
       console.error("Erro ao criar profissional:", error);
-      alert('Erro ao criar profissional');
+      
+      const msg = error.response?.data || 'Erro ao criar profissional';
+      alert(msg);
+
     } finally {
       setSaving(false);
     }
@@ -36,6 +79,7 @@ export function ProfissionalCreatePage() {
   return (
     <div className="container" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem' }}>
       <div className="card" style={{ maxWidth: '500px', width: '100%', backdropFilter: 'blur(10px)', backgroundColor: 'rgba(30, 41, 59, 0.7)' }}>
+        
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
@@ -58,71 +102,68 @@ export function ProfissionalCreatePage() {
           }}>
             Novo Profissional
           </h2>
-          <p style={{ color: 'var(--text-muted)' }}>Cadastre um novo profissional no sistema</p>
+          <p style={{ color: 'var(--text-muted)' }}>Vincule um usuário existente como profissional</p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label htmlFor="nome" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label htmlFor="usuarioId" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
               <User size={16} />
-              Nome Completo
+              Selecionar Usuário (Perfil Profissional)
             </label>
-            <input
-              type="text"
-              id="nome"
-              name="nome"
-              placeholder="Digite o nome completo"
-              value={formData.nome}
-              onChange={handleChange}
-              required
-            />
-          </div>
 
-          <div style={{ marginBottom: '1rem' }}>
-            <label htmlFor="email" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-              <Mail size={16} />
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="profissional@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <select
+                id="usuarioId"
+                name="usuarioId"
+                value={formData.usuarioId}
+                onChange={handleChange}
+                required
+                style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid #ccc', background: 'var(--bg-input)', color: 'var(--text-main)' }}
+                disabled={loadingUsers}
+              >
+                <option value="">Selecione um usuário...</option>
+                {usuariosDisponiveis.map(usuario => (
+                  <option key={usuario.id} value={usuario.id}>
+                    {usuario.nome} ({usuario.email})
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div style={{ marginBottom: '1rem' }}>
-            <label htmlFor="telefone" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-              <Phone size={16} />
-              Telefone
-            </label>
-            <input
-              type="tel"
-              id="telefone"
-              name="telefone"
-              placeholder="(00) 00000-0000"
-              value={formData.telefone}
-              onChange={handleChange}
-            />
+            <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              Não encontrou?{' '}
+              <span 
+                onClick={() => navigate('/admin/usuarios/novo')}
+                style={{ color: 'var(--primary)', cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                Cadastrar novo usuário
+              </span>
+            </div>
+
+            {loadingUsers && <p style={{ fontSize: '0.8rem', color: '#aaa' }}>Carregando usuários...</p>}
+            {!loadingUsers && usuariosDisponiveis.length === 0 && (
+              <p style={{ fontSize: '0.8rem', color: '#ff6b6b', marginTop: '0.5rem' }}>
+                Nenhum usuário com perfil 'PROFISSIONAL' disponível. Cadastre um primeiro.
+              </p>
+            )}
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
-            <label htmlFor="especialidade" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <label htmlFor="especialidades" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
               <Briefcase size={16} />
-              Especialidade
+              Especialidades
             </label>
             <input
               type="text"
-              id="especialidade"
-              name="especialidade"
+              id="especialidades"
+              name="especialidades"
               placeholder="Ex: Corte de Cabelo, Manicure..."
-              value={formData.especialidade}
+              value={formData.especialidades}
               onChange={handleChange}
-              required
+              style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ccc', background: 'var(--bg-input)', color: 'var(--text-main)' }}
             />
           </div>
 
@@ -130,9 +171,9 @@ export function ProfissionalCreatePage() {
             type="submit"
             className="btn btn-primary"
             style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}
-            disabled={saving}
+            disabled={saving || (usuariosDisponiveis.length === 0 && !formData.usuarioId)}
           >
-            {saving ? 'Criando...' : <><UserPlus size={18} /> Criar Profissional</>}
+            {saving ? 'Vinculando...' : <><UserPlus size={18} /> Criar Profissional</>}
           </button>
         </form>
       </div>
