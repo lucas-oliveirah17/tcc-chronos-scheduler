@@ -33,6 +33,14 @@ O objetivo é desenvolver uma solução de software moderna (uma Single Page App
 
 ---
 
+## 📊 Apresentação do Projeto
+
+[![Visualizar Apresentação](https://img.shields.io/badge/Visualizar-Apresentação-b31b1b?style=for-the-badge&logo=adobe-acrobat-reader&logoColor=white)](docs/Chronos_TCC_Apresentacao.pdf)
+
+Clique no botão acima para visualizar os slides da apresentação utilizada na banca.
+
+---
+
 ## ✨ Funcionalidades Principais
 
 O sistema foi modelado com três perfis de usuário, cada um com suas permissões específicas:
@@ -124,7 +132,7 @@ cd tcc-barber-scheduler
 **a. Para o Docker (Banco de Dados):**
 * Na raiz do projeto (`tcc-barber-scheduler`), crie um arquivo chamado `.env`.
 * Copie o conteúdo de `.env.example` para o `.env` e define sua senha:
-```bash
+```env
 DB_USER=barber_admin
 DB_PASS=sua_senha_aqui
 DB_NAME=barber_db
@@ -135,7 +143,7 @@ DB_PORT=5432:5432
 * Navegue até a pasta `backend/src/main/resources/`.
 * Crie um novo arquivo chamado `application-local.properties`.
 * Cole o seguinte conteúdo e use a **mesma senha** definida no `.env`:
-```bash
+```properties
 # Credenciais para Conexao com o Banco de Dados (Docker)
 spring.datasource.url=jdbc:postgresql://localhost:5432/barber_db
 spring.datasource.username=barber_admin
@@ -199,6 +207,18 @@ npm run dev
 
    [![GitHub](https://img.shields.io/badge/GitHub-100000?style=plastic&logo=github&logoColor=white)](https://github.com/danielnporto)
    [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=plastic&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/danielnporto/)
+
+---
+
+## 📚 Documentação e Links Úteis
+
+Aqui estão alguns recursos adicionais para entender melhor o projeto:
+
+* [**Relatório Técnico**](https://www.overleaf.com/read/mqkgkrjsndqn#8f4c2a)
+* [**Modelagem do Banco de Dados (DER)**](docs/diagramas/Entidade-Relacionamento.png)
+* [**Casos de Uso**](docs/diagramas/Casos_de_Uso.png)
+* [**Diagrama de Sequência - Autenticação do Usuário**](docs/diagramas/Sequencia_RF05_Autenticacao_Usuario.png)
+* [**Diagrama de Sequência - Criar Agendamento**](docs/diagramas/Sequencia_RF10_Criar_Agendamento.png)
 
 ---
 
