@@ -5,7 +5,7 @@
 ![React](https://img.shields.io/badge/React-19.2-blue?logo=react)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-blue?logo=postgresql)
 ![Docker](https://img.shields.io/badge/Docker-blue?logo=docker)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![License](https://img.shields.io/badge/License-AGPL_v3-blue.svg?style=flat-square)
 
 > Aplicação web para otimizar a gestão de agendamentos em barbearias. Substitui o controle manual por um painel de admin (Java/Spring) e autoatendimento ao cliente (React). Projeto de TCC do curso de Análise e Desenvolvimento de Sistema (IFSP - Guarulhos).
 
@@ -253,4 +253,7 @@ Aqui estão alguns recursos adicionais para entender melhor o projeto:
 ---
 
 ## 📄 Licença
-Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+Este projeto está licenciado sob a **GNU Affero General Public License v3.0 (AGPL-3.0)**. 
+
+Os autores originais (**Lucas Oliveira** e **Daniel Porto**) reservam-se o direito de relicenciar este software para fins comerciais ou versões proprietárias. A licença AGPL garante que qualquer derivado distribuído ou oferecido via rede permaneça com o código fonte aberto sob os mesmos termos. Veja o arquivo [LICENSE](LICENSE) para detalhes.
