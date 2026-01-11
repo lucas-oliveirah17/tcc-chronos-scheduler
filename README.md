@@ -19,7 +19,7 @@
 * [Funcionalidades Principais](#-funcionalidades-principais)
 * [Arquitetura](#-arquitetura)
 * [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-* [Como Executar o Projeto (Ambiente Local)](#-como-executar-o-projeto-ambiente-local)
+* [Como Executar o Projeto (Ambiente Local)](#%EF%B8%8F-como-executar-o-projeto-ambiente-local)
 * [Autores](#-autores)
 * [Licença](#-licença)
 
