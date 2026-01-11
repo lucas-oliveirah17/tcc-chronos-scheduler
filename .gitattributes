@@ -1,7 +1,8 @@
-# Define o comportamento de quebra de linha padrão
-* text=auto eol=lf
+# Define o comportamento de quebra de linha padrão (Auto-detecção)
+* text=auto
 
-# Define explicitamente os arquivos de texto que devem SEMPRE usar LF
+# Define explicitamente arquivos que DEVEM usar LF (Padrão Linux/Unix)
+# Essencial para deploy no Render/Vercel e execução de scripts
 *.java text eol=lf
 *.js text eol=lf
 *.jsx text eol=lf
@@ -13,8 +14,15 @@
 *.properties text eol=lf
 *.gitignore text eol=lf
 *.gitattributes text eol=lf
+**/mvnw text eol=lf
+
+# Define arquivos que DEVEM usar CRLF (Padrão Windows)
+*.cmd text eol=crlf
+*.bat text eol=crlf
 
 # Define arquivos que não são texto (binários)
 *.jar binary
 *.png binary
 *.jpg binary
+*.pdf binary
+*.ico binary

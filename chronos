@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# Definição de Cores
+WHITE='\033[1;37m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+NC='\033[0m' # No Color (Reset)
+
+# Função para exibir a ajuda
+show_help() {
+    echo -e "${CYAN}==============================================================${NC}"
+    echo -e "${CYAN}             UTILITÁRIO DE AUTOMAÇÃO CHRONOS                  ${NC}"
+    echo -e "${CYAN}==============================================================${NC}"
+    
+    echo -e "\n${WHITE}--- FLUXO DE TRABALHO ---${NC}"
+    echo -e "  ${GREEN}-s, start${NC}      - Inicia ambiente completo (Docker)"
+    echo -e "  ${MAGENTA}-d, dev${NC}        - Modo IDE (Sobe infra e para Backend no Docker)"
+    echo -e "  ${YELLOW}-p, stop${NC}       - Para todos os containers (mantém dados)"
+    echo -e "  ${YELLOW}-r, restart${NC}    - Recompila e reinicia apenas o Backend"
+
+    echo -e "\n${WHITE}--- DIAGNÓSTICO E INSPEÇÃO ---${NC}"
+    echo -e "  ${CYAN}-st, status${NC}     - Lista containers ativos e portas"
+    echo -e "  ${CYAN}-l, logs${NC}       - Exibe logs em tempo real (Ctrl+C p/ sair)"
+    echo -e "  ${CYAN}-db, database${NC}   - Abre o terminal SQL (psql) do Postgres"
+
+    echo -e "\n${WHITE}--- MANUTENÇÃO E LIMPEZA ---${NC}"
+    echo -e "  ${RED}-rb, rebuild${NC}    - Força reconstrução das imagens (sem cache)"
+    echo -e "  ${RED}-c, clean${NC}      - RESET TOTAL: Remove containers e apaga o banco"
+
+    echo -e "\n${WHITE}--- OUTROS ---${NC}"
+    echo -e "  ${GREEN}-h, help${NC}       - Mostra esta tela de ajuda"
+    echo -e "${CYAN}==============================================================${NC}"
+}
+
+case "$1" in
+    start|-s)
+    echo -e "${GREEN}>>> [START] Iniciando ambiente Chronos...${NC}"
+    docker-compose up -d
+    ;;
+    dev|-d)
+    echo -e "${MAGENTA}>>> [DEV MODE] Preparando infraestrutura para desenvolvimento...${NC}"
+    # Para o backend explicitamente caso ele esteja rodando no Docker
+    docker-compose stop backend
+    echo -e "${YELLOW}Dica: Agora voce pode rodar o backend direto pela sua IDE.${NC}"
+    # Sobe apenas os serviços listados abaixo
+    docker-compose up -d --no-deps db-postgres pgadmin frontend
+    ;;
+    stop|-p)
+    echo -e "${YELLOW}>>> [STOP] Parando containers...${NC}"
+    docker-compose stop
+    ;;
+    restart|-r)
+    echo -e "${CYAN}>>> [RESTART] Recompilando backend e reiniciando...${NC}"
+    docker-compose up -d --build backend
+    ;;
+
+    status|-st)
+    echo -e "${CYAN}>>> Status dos containers:${NC}"
+    docker-compose ps
+    ;;
+    logs|-l)
+    echo -e "${CYAN}>>> [LOGS] Exibindo logs dos servicos...${NC}"
+    docker-compose logs -f
+    ;;
+    database|-db)
+    echo -e "${CYAN}>>> Abrindo terminal do banco (digite a senha do .env)...${NC}"
+    # Puxa o nome do banco do .env automaticamente
+    docker exec -it chronos-db psql -U chronos_admin -d chronos_db
+    ;;
+
+    rebuild|-rb)
+    echo -e "${RED}>>> Reconstruindo imagens do zero...${NC}"
+    docker-compose build --no-cache
+    docker-compose up -d
+    ;;
+    clean|-c)
+    echo -e "${RED}>>> [CLEAN] CUIDADO: Removendo containers e volumes de dados...${NC}"
+    docker-compose down -v
+    ;;
+    
+    help|--help|-h)
+    show_help
+    ;;
+    *)
+    echo -e "${RED}Erro: Comando '$1' nao reconhecido.${NC}"
+    show_help
+    exit 1
+esac

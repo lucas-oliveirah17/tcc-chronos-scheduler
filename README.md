@@ -9,7 +9,7 @@
 
 > Aplicação web para otimizar a gestão de agendamentos em barbearias. Substitui o controle manual por um painel de admin (Java/Spring) e autoatendimento ao cliente (React). Projeto de TCC do curso de Análise e Desenvolvimento de Sistema (IFSP - Guarulhos).
 
-**🛠️ Status do Projeto:** Em Desenvolvimento
+**🚀 Status do Projeto:** Em Desenvolvimento
 
 ---
 
@@ -110,92 +110,122 @@ Este projeto foi construído com as seguintes tecnologias:
 
 ---
 
-## 🚀 Como Executar o Projeto (Ambiente Local)
+## 🛠️ Como Executar o Projeto (Ambiente Local)
 
-Para rodar este projeto em sua máquina local, siga os passos abaixo. O projeto é divido em `backend` (a API em Java/Spring) e `frontend` (a aplicação em React/Vite);
+O projeto é divido em `backend` (API em Java/Spring) e `frontend` (Aplicação em React/Vite).
+Para facilitar o gerenciamento, incluímos o utilitário de automação `chronos`.
 
-**Pré-requisitos:**
-* [Git](https://git-scm.com/)
-* [Docker Desktop](https://www.docker.com/products/docker-desktop/) (para o banco de dados)
-* [JDK 21 (OpenJDK)](https://adoptium.net/))
-* [Node.js 24 (LTS)](https://nodejs.org/en/blog/release/v24.11.0) (Use o NVM ([Linux](https://github.com/nvm-sh/nvm)/[Windows](https://github.com/coreybutler/nvm-windows)) para gerenciar)
-* IDE Java ([Eclipse](https://www.eclipse.org/downloads/packages/release/2025-09/r/eclipse-ide-java-developers)) e editor de código ([VS Code](https://code.visualstudio.com/download))
+### 1. Pré-requisitos:
+- [Git](https://git-scm.com/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (para o banco de dados)
+- [JDK 21 (OpenJDK)](https://adoptium.net/))
+- IDE Java ([Eclipse](https://www.eclipse.org/downloads/packages/release/2025-09/r/eclipse-ide-java-developers) ou [IntelliJ](https://www.jetbrains.com/idea/)) 
 
-**1. Clonar o Repositório**
+### 2. Clonar o Repositório
+
 ```bash
 git clone https://github.com/lucas-oliveirah17/tcc-barber-scheduler.git
 cd tcc-barber-scheduler
 ```
 
-**2. Configurar Variáveis de Ambiente:**
+### 3. Configurar Variável de Ambiente
 
-**a. Para o Docker (Banco de Dados):**
-* Na raiz do projeto (`tcc-barber-scheduler`), crie um arquivo chamado `.env`.
-* Copie o conteúdo de `.env.example` para o `.env` e define sua senha:
-```env
-DB_USER=barber_admin
-DB_PASS=sua_senha_aqui
-DB_NAME=barber_db
-DB_PORT=5432:5432
-```
+Copie o arquivo `.env.example`, e o renomeie para `.env`'. Configure as variáveis de ambiente como preferir.
 
-**b. Para o Spring Boot (Aplicação Java):**
-* Navegue até a pasta `backend/src/main/resources/`.
-* Crie um novo arquivo chamado `application-local.properties`.
-* Cole o seguinte conteúdo e use a **mesma senha** definida no `.env`:
-```properties
-# Credenciais para Conexao com o Banco de Dados (Docker)
-spring.datasource.url=jdbc:postgresql://localhost:5432/barber_db
-spring.datasource.username=barber_admin
-spring.datasource.password=sua_senha_aqui
-
-# Chave Secreta (pode ser gerada no Git Bash, pelo comando "openssl rand -base64 64")
-jwt.secret=CHAVE_SECRETA
-
-# Tempo de expiração do token
-jwt.expiration.hours = 8
-```
-
-
-**3. Iniciar o Banco de Dados (Docker):**
-* No terminal, na raiz do projeto, suba o contêiner do PostgreSQL. 
 ```bash
-docker-compose up -d
+cp .env.example .env # No Windows (CMD): copy .env.example .env
 ```
-* O Docker irá baixar a imagem do PostgreSQL e iniciar o banco de dados em background.
 
-**4. Rodar o Back-end (Java/Spring):**
-* Abra a pasta `backend` no Eclipse IDE como projeto Maven.
-* Aguarde o Maven baixar as dependências do `pom.xml`.
-* Encontre a classe principal de inicizalização `BarberSchedulerApplication.java`.
-* Execute este arquivo como uma Aplicação Java.
-* O servidor estará rodando em `http://localhost:8080`.
+Dê também permissão de execução ao utilizatário (Linux/Git Bash)
 
-**5.Rodar o Front-end (React):**
-O Frond-end usa o NVM (Node Version Manager) para garantir que todos os desenvolvedores usem a mesma versão do Node.js (Node 24 LTS).
-* Em um terminal separado, navegue até a pasta `frontend`
-* Em seguida, ative a versão correta do Node.js:
-	* **Linux**:
-	```bash
-	nvm use
-	```
-	(Se for a primeira vez, o terminal avisará se é necessário rodar `nvm install lts/rei` 
-	
-	* **Windows**:
-	```bash
-	nvm install 24
-	nvm use 24
-	```
-* Instale as dependências (apenas na primeira vez):
 ```bash
-npm install
+chmod +x chronos
 ```
-* Inicie o servidor de desenvolvimento do Vite:
+
+### 4. Execução com o Utilitário Chronos
+
+O script `./chronos` gerencia todo o ecossistema Docker do projeto. Escolha um dos modos abaixo:
+
+#### A) Modo Demonstração:
+
+    Sobe todos os serviços (Banco, Back e Front) no Docker. Ideal para ver o projeto funcionando rapidamente sem abrir IDEs.
+    
+    ```bash
+    ./chronos start
+    ```
+
+#### B) Modo Desenvolvedor:
+
+    Sobe apenas o Banco de Dados, pgAdmin e o Frontend no Docker. O Backend fica livre para ser executado na sua IDE, permitindo Debug e Hot Swap.
+
+    ```bash
+    ./chronos dev
+    ```
+
+#### Endereços Locais:
+| Serviço | URL |
+| :--- | :--- |
+| **Frontend** | [http://localhost:5173](http://localhost:5173) |
+| **Backend** | [http://localhost:8080/api](http://localhost:8080/api) |
+| **pgAdmin** | [http://localhost:5050](http://localhost:5050) |
+
+
+### 5. Configuração para Execução via IDE
+
+Se você utilizou `./chronos dev`, siga estes passos para rodar o backend localmente:
+
+#### A) Configurar propriedades locais
+
+Navegue até `backend/src/main/resources/` e configure o arquivo de propriedades:
+
 ```bash
-npm run dev
+cd backend/src/main/resources/
+cp application-local.properties.example application-local.properties
 ```
-* O terminal mostrará que a aplicação estará rodando. App estará disponível no navegador `http://localhost:5173`.
----
+
+**Atenção:** Edite o arquivo `application-local.properties` garantindo que a senha do banco e o `jwt.secret` coincidam com os valores definidos no seu arquivo `.env` da raiz.
+
+#### B) Rodar o Back-end via Eclipse (Java/Spring):
+
+1. Importe a pasta `backend` como no **Existing Maven Project**.
+2. Aguarde o Maven baixar as dependências.
+3. Execute a classe `BackendApplication.java` como **Java Application**.
+
+### 6. Comandos Úteis do `chronos`
+
+| Atalho | Comando Completo | Descrição |
+| :--- | :--- | :--- |
+| `-s` | `start` | Inicia o ecossistema completo no Docker |
+| `-d` | `dev` | Modo IDE: Sobe infra e libera a porta 8080 |
+| `-p` | `stop` | Para os containers (mantém os dados) |
+| `-r` | `restart` | Recompila e reinicia apenas o Backend |
+| `-st` | `status` | Lista containers ativos e portas |
+| `-l` | `logs` | Exibe logs em tempo real |
+| `-db` | `database` | Abre o terminal SQL (psql) do Postgres |
+| `-rb` | `rebuild` | Força reconstrução das imagens sem cache |
+| `-c` | `clean` | **Reset Total:** Remove containers e volumes |
+| `-h` | `help` | Mostra o menu de ajuda com todos os comandos |
+
+### 7. Dica de Produtividade: Atalho chronos
+Para evitar digitar `./` todas as vezes, o projeto já inclui um arquivo `.bashrc` na raiz com aliases pré-configurados.
+
+#### A) Ativar Temporariamente (Apenas na sessão atual):
+
+Sempre que abrir o terminal na pasta do projeto, você pode carregar os atalhos rapidamente:
+
+```bash
+source .bashrc
+```
+
+#### B) Configuração Permanente:
+
+Se você utiliza **Git Bash** ou **Linux** e deseja usar o comando `chronos` de qualquer lugar do terminal sem precisar do `./`, execute o comando abaixo **dentro da pasta raiz do projeto**:
+
+```bash
+echo "alias chronos='bash $PWD/chronos'" >> ~/.bashrc && source ~/.bashrc
+```
+
+Após rodar este comando, você poderá digitar apenas `chronos start` ou `chronos help` em qualquer nova janela do terminal.
 
 ## 🎓 Autores
 - **Lucas Silva de Oliveira** - Desenvolvedor Back-end & Segurança

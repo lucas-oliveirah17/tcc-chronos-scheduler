@@ -1,73 +1,52 @@
-# --- Dados Sensíveis ---
-#Ignora o arquivo de senhas e variáveis de ambiente do Docker
-/.env
-/.env.local
-/.env.development
+# --- Dados Sensiveis e Ambiente ---
+.env
+.env.*
+!.env.example
+# Arquivos de propriedades do Spring (locais e raiz)
+**/application-local.properties
 
-# Ignora arquivos de propriedades locais do Spring (que podem conter senhas)
-/backend/src/main/resources/application-local.properties
-
-# --- Java / Maven / Spring Boot ---
-# Ignora a pasta de saída do build do Maven
-/target/
-
-# Ignora os arquivos de wrapper do Maven
-/.mvn/
-
-# Ignora arquivos de log
+# --- Java / Maven (Backend) ---
+**/target/
+**/build/
+**/*.class
+**/*.jar
+**/*.war
+**/*.zip
 *.log
+**/hs_err_pid*
 
-# Ignora arquivos temporários do Maven
-/pom.xml.bak
-
-# Arquivos de classe compilados
-*.class
-
-# Arquivos de pacote
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# Logs de crash da JVM
-hs_err_pid*
-replay_pid*
-
-# --- Node.js / React ---
-# Ignora a pasta de dependências do Node
-/node_modules/
-
-# Ignora a pasta de build do React
-/build/
-
-# Ignora logs de debug do npm e yarn
+# --- Node / React (Frontend) ---
+**/node_modules/
+**/dist/
+**/dist-ssr/
+/frontend/build/
 npm-debug.log*
-yarn-error.log
+yarn-debug.log*
+yarn-error.log*
 
-# --- IDEs ---
-# Eclipse
+# --- IDEs (Eclipse, VS Code, IntelliJ) ---
+.metadata/
 .classpath
 .project
 .settings/
 .factorypath
-
-# Visual Studio Code
-.vscode/*
-!/.vscode/extensions.json
+.springBeans
+.sts4-cache
+.apt_generated
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+!.vscode/extensions.json
 *.code-workspace
+**/nbproject/private/
 
-# --- Docker ---
-# Ignora a pasta de dados persistentes do banco de dados
-/postgres-data/
+# --- Docker & Banco de Dados ---
+**/postgres-data/
+**/db-data/
 
 # --- Sistema Operacional ---
-# macOS
 .DS_Store
-._*
-
-# Windows
 Thumbs.db
 desktop.ini

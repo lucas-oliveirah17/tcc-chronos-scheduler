@@ -1,5 +1,17 @@
 # Ignora pastas de build e configuração do Git/Maven
 target/
-.git/
-.gitignore
-.mvn/
+
+# Logs locais
+*.log
+
+# Arquivos de configuração de IDE
+.settings/
+.classpath
+.project
+.factorypath
+.idea/
+.vscode/
+
+# --- OS ---
+.DS_Store
+Thumbs.db

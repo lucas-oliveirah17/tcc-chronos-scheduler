@@ -1,0 +1,12 @@
+# Conexão com o Banco no Docker
+spring.datasource.url=jdbc:postgresql://localhost:5432/chronos_db
+spring.datasource.username=seu_usuario
+spring.datasource.password=sua_senha
+
+# JWT e Segurança
+#Gerado via: openssl rand -base64 32
+jwt.secret=chave_secreta
+jwt.expiration.hours=24
+
+# Permite que o Hibernate crie as tabelas automaticamente em dev
+spring.jpa.hibernate.ddl-auto=update

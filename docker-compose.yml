@@ -1,17 +1,65 @@
 services:
-  # Serviço do Banco de Dados PostgreSQL
+  # BANCO DE DADOS (PostgreSQL)
   db-postgres:
-    image: postgres:18-alpine  # Usa a imagem oficial do Postgres
-    container_name: barber-db
+    image: postgres:18-alpine
+    container_name: chronos-db
     restart: always
-    environment:
-      POSTGRES_USER: ${DB_USER}       # Lê o usuário do arquivo .env
-      POSTGRES_PASSWORD: ${DB_PASS}   # Lê a senha do arquivo .env
-      POSTGRES_DB: ${DB_NAME}         # Lê o nome do banco do arquivo .env
+    environment: # Lê o arquivo .env para obter as variáveis
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
     ports:
-      - ${DB_PORT}  # Mapeia a porta 5432 do seu PC para a porta 5432 do contêiner
+      - "${DB_PORT}:5432"  # Mapeia a porta de valor DB_PORT do seu PC para a porta 5432 do contêiner
     volumes:
       - postgres_data_volume:/var/lib/postgresql/data # Garante que os dados do banco persistam
+
+  # Interface Visual para o Banco (Acesse em http://localhost:5050)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: chronos-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db-postgres
+  
+  # --- BACKEND (Java Spring Boot)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: chronos-backend
+    ports:
+      - "8080:8080"
+    environment:
+      # Sobrescreve o application.properties para usar o banco do Docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-postgres:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASS}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: local,seed
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION_HOURS: ${JWT_EXPIRATION_HOURS}
+    depends_on:
+      - db-postgres
+
+    # --- FRONTEND (React + Vite) ---
+  frontend:
+    image: node:22-alpine
+    container_name: chronos-frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "${FRONT_PORT}:5173"
+    environment:
+      - "VITE_API_BASE_URL=${BASE_URL}"
+    command: sh -c "npm install && npm run dev -- --host"
+    depends_on:
+      - backend
      
 volumes:
     postgres_data_volume: {}
