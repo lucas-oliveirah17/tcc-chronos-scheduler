@@ -148,19 +148,19 @@ O script `./chronos` gerencia todo o ecossistema Docker do projeto. Escolha um d
 
 #### A) Modo Demonstração:
 
-    Sobe todos os serviços (Banco, Back e Front) no Docker. Ideal para ver o projeto funcionando rapidamente sem abrir IDEs.
-    
-    ```bash
-    ./chronos start
-    ```
+Sobe todos os serviços (Banco, Back e Front) no Docker. Ideal para ver o projeto funcionando rapidamente sem abrir IDEs.
+
+```bash
+./chronos start
+```
 
 #### B) Modo Desenvolvedor:
 
-    Sobe apenas o Banco de Dados, pgAdmin e o Frontend no Docker. O Backend fica livre para ser executado na sua IDE, permitindo Debug e Hot Swap.
+Sobe apenas o Banco de Dados, pgAdmin e o Frontend no Docker. O Backend fica livre para ser executado na sua IDE, permitindo Debug e Hot Swap.
 
-    ```bash
-    ./chronos dev
-    ```
+```bash
+./chronos dev
+```
 
 #### Endereços Locais:
 | Serviço | URL |
