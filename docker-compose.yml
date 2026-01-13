@@ -33,7 +33,7 @@ services:
       dockerfile: Dockerfile
     container_name: chronos-backend
     ports:
-      - "8080:8080"
+      - "${BACK_PORT}:8080"
     environment:
       # Sobrescreve o application.properties para usar o banco do Docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://db-postgres:5432/${DB_NAME}
