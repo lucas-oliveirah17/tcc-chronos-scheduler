@@ -9,6 +9,13 @@ CYAN='\033[0;36m'
 MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color (Reset)
 
+# Detecção automática do comando Docker Compose
+if docker-compose version >/dev/null 2>&1; then
+    DOCKER_CMD="docker-compose"
+else
+    DOCKER_CMD="docker compose"
+fi
+
 # Função para exibir a ajuda
 show_help() {
     echo -e "${CYAN}==============================================================${NC}"
@@ -38,32 +45,32 @@ show_help() {
 case "$1" in
     start|-s)
     echo -e "${GREEN}>>> [START] Iniciando ambiente Chronos...${NC}"
-    docker-compose up -d
+    ${DOCKER_CMD} up -d
     ;;
     dev|-d)
     echo -e "${MAGENTA}>>> [DEV MODE] Preparando infraestrutura para desenvolvimento...${NC}"
     # Para o backend explicitamente caso ele esteja rodando no Docker
-    docker-compose stop backend
+    ${DOCKER_CMD} stop backend
     echo -e "${YELLOW}Dica: Agora voce pode rodar o backend direto pela sua IDE.${NC}"
     # Sobe apenas os serviços listados abaixo
-    docker-compose up -d --no-deps db-postgres pgadmin frontend
+    ${DOCKER_CMD} up -d --no-deps db-postgres pgadmin frontend
     ;;
     stop|-p)
     echo -e "${YELLOW}>>> [STOP] Parando containers...${NC}"
-    docker-compose stop
+    ${DOCKER_CMD} stop
     ;;
     restart|-r)
     echo -e "${CYAN}>>> [RESTART] Recompilando backend e reiniciando...${NC}"
-    docker-compose up -d --build backend
+    ${DOCKER_CMD} up -d --build backend
     ;;
 
     status|-st)
     echo -e "${CYAN}>>> Status dos containers:${NC}"
-    docker-compose ps
+    ${DOCKER_CMD} ps
     ;;
     logs|-l)
     echo -e "${CYAN}>>> [LOGS] Exibindo logs dos servicos...${NC}"
-    docker-compose logs -f
+    ${DOCKER_CMD} logs -f
     ;;
     database|-db)
     echo -e "${CYAN}>>> Abrindo terminal do banco (digite a senha do .env)...${NC}"
@@ -73,12 +80,12 @@ case "$1" in
 
     rebuild|-rb)
     echo -e "${RED}>>> Reconstruindo imagens do zero...${NC}"
-    docker-compose build --no-cache
-    docker-compose up -d
+    ${DOCKER_CMD} build --no-cache
+    ${DOCKER_CMD} up -d
     ;;
     clean|-c)
     echo -e "${RED}>>> [CLEAN] CUIDADO: Removendo containers e volumes de dados...${NC}"
-    docker-compose down -v
+    ${DOCKER_CMD} down -v
     ;;
     
     help|--help|-h)
