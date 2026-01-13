@@ -48,7 +48,7 @@ public class SecurityConfig {
             // Necessário para operações POST e PUT do Postman e Frontend
             .csrf(csrf -> csrf.disable())
             
-            .cors(cors -> {})      
+            .cors(_ -> {})      
             // //Define a política de sessão como STATELESS
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             

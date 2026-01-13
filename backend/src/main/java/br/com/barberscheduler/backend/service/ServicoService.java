@@ -79,7 +79,7 @@ public class ServicoService extends BaseService {
         if(dto.getNome() != null && 
                 !dto.getNome().equals(servicoExistente.getNome())) {
             servicoRepository.findByNomeRegardlessOfStatus(dto.getNome())
-                .ifPresent(u -> {
+                .ifPresent(_ -> {
                     throw new IllegalArgumentException(
                             "O nome de serviço " + dto.getNome() + " já está cadastrado.");
                     });

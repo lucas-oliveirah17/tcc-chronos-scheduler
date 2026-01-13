@@ -1,5 +1,5 @@
-# Imagem oficial do Maven com Java 21 para compilar o .jar
-FROM maven:3.9-eclipse-temurin-21 AS build
+# Imagem oficial do Maven com Java 25 para compilar o .jar
+FROM maven:3.9-eclipse-temurin-25 AS build
 
 # Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
@@ -12,8 +12,8 @@ COPY . .
 # -DskipTests pula os testes para um build mais rápido
 RUN mvn clean package -DskipTests
 
-# Usamos uma imagem "limpa" e leve, que só contém o Java 21
-FROM eclipse-temurin:21-jre-alpine
+# Usamos uma imagem "limpa" e leve, que só contém o Java 25
+FROM eclipse-temurin:25-jre-alpine
 
 WORKDIR /app
 

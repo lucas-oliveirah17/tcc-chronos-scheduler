@@ -88,7 +88,7 @@ public class UsuarioService extends BaseService {
                 !dto.getEmail().equals(usuarioExistente.getEmail())) {
             
             usuarioRepository.findByEmailRegardlessOfStatus(dto.getEmail())
-                .ifPresent(u -> {
+                .ifPresent(_ -> {
                     throw new IllegalArgumentException(
                             "O e-mail " + dto.getEmail() + " já está cadastrado.");
                     });
