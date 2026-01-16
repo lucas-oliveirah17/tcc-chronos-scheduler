@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import br.com.barberscheduler.backend.dto.UsuarioRequestDTO;
 import br.com.barberscheduler.backend.dto.UsuarioResponseDTO;
-import br.com.barberscheduler.backend.dto.UsuarioUpdateDTO;
+import br.com.barberscheduler.backend.dto.UsuarioUpdateRequestDTO;
 import br.com.barberscheduler.backend.model.Usuario;
 import br.com.barberscheduler.backend.repository.UsuarioRepository;
 
@@ -81,7 +81,7 @@ public class UsuarioService extends BaseService {
     }
     
     @Transactional
-    public UsuarioResponseDTO atualizar(Long id, UsuarioUpdateDTO dto) {
+    public UsuarioResponseDTO atualizar(Long id, UsuarioUpdateRequestDTO dto) {
         Usuario usuarioExistente = findEntidadeById(id);
         
         if(dto.email() != null && 

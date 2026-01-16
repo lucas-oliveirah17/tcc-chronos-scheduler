@@ -15,7 +15,7 @@ import java.util.List;
 
 import br.com.barberscheduler.backend.dto.UsuarioRequestDTO;
 import br.com.barberscheduler.backend.dto.UsuarioResponseDTO;
-import br.com.barberscheduler.backend.dto.UsuarioUpdateDTO;
+import br.com.barberscheduler.backend.dto.UsuarioUpdateRequestDTO;
 import br.com.barberscheduler.backend.service.UsuarioService;
 
 @RestController
@@ -54,7 +54,7 @@ public class UsuarioController {
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> atualizar(
             @PathVariable Long id, 
-            @RequestBody UsuarioUpdateDTO dto) {
+            @RequestBody UsuarioUpdateRequestDTO dto) {
         UsuarioResponseDTO usuarioAtualizado = usuarioService.atualizar(id, dto);
         
         return ResponseEntity.ok(usuarioAtualizado);
