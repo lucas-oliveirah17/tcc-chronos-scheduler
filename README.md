@@ -1,6 +1,6 @@
 # Sistema de Agendamento para Barbearias - TCC
 
-![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)
+![Java](https://img.shields.io/badge/Java-25-orange?logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring_Boot-3.5.7-green?logo=spring)
 ![React](https://img.shields.io/badge/React-19.2-blue?logo=react)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-blue?logo=postgresql)
@@ -85,7 +85,7 @@ A solução utiliza uma arquitetura de aplicação web desacoplada, composta por
 Este projeto foi construído com as seguintes tecnologias:
 
 * **Back-end:**
-    * Java 21 (LTS)
+    * Java 25 (LTS)
     * Spring Boot 3.5.7
 	* Spring Data JPA (Hibernate)
     * Spring Security
@@ -118,7 +118,7 @@ Para facilitar o gerenciamento, incluímos o utilitário de automação `chronos
 ### 1. Pré-requisitos:
 - [Git](https://git-scm.com/)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (para o banco de dados)
-- [JDK 21 (OpenJDK)](https://adoptium.net/))
+- [JDK 25 (OpenJDK)](https://adoptium.net/))
 - IDE Java ([Eclipse](https://www.eclipse.org/downloads/packages/release/2025-09/r/eclipse-ide-java-developers) ou [IntelliJ](https://www.jetbrains.com/idea/)) 
 
 ### 2. Clonar o Repositório
@@ -172,18 +172,13 @@ Sobe apenas o Banco de Dados, pgAdmin e o Frontend no Docker. O Backend fica liv
 
 ### 5. Configuração para Execução via IDE
 
-Se você utilizou `./chronos dev`, siga estes passos para rodar o backend localmente:
+Ao utilizar o comando `./chronos dev`, o utilitário gerencia automaticamente a infraestrutura e a configuração do ambiente:
 
-#### A) Configurar propriedades locais
+#### A) Sincronização Automática
 
-Navegue até `backend/src/main/resources/` e configure o arquivo de propriedades:
+O utilitário gera automaticamente o arquivo `backend/src/main/resources/application-local.properties` baseando-se nos valores definidos no seu `.env` da raiz.
 
-```bash
-cd backend/src/main/resources/
-cp application-local.properties.example application-local.properties
-```
-
-**Atenção:** Edite o arquivo `application-local.properties` garantindo que a senha do banco e o `jwt.secret` coincidam com os valores definidos no seu arquivo `.env` da raiz.
+    Nota: Os arquivos `.example` presentes no repositório servem apenas como referência técnica da estrutura necessária. O uso do utilitário dispensa a configuração manual destes arquivos.
 
 #### B) Rodar o Back-end via Eclipse (Java/Spring):
 
