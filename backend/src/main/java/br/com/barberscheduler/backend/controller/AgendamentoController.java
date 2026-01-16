@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import br.com.barberscheduler.backend.dto.AgendamentoDTO;
+import br.com.barberscheduler.backend.dto.AgendamentoResponseDTO;
 import br.com.barberscheduler.backend.dto.AgendamentoRequestDTO;
 import br.com.barberscheduler.backend.service.AgendamentoService;
 
@@ -27,22 +27,22 @@ public class AgendamentoController {
     }
     
     @PostMapping
-    public ResponseEntity<AgendamentoDTO> criar(
+    public ResponseEntity<AgendamentoResponseDTO> criar(
             @RequestBody AgendamentoRequestDTO dto) {
-        AgendamentoDTO agendamentoCriado = agendamentoService.criar(dto);
+        AgendamentoResponseDTO agendamentoCriado = agendamentoService.criar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(agendamentoCriado);
     }
     
     @GetMapping
-    public ResponseEntity<List<AgendamentoDTO>> listarTodos() {
-        List<AgendamentoDTO> agendamentos = agendamentoService.listarTodos();
+    public ResponseEntity<List<AgendamentoResponseDTO>> listarTodos() {
+        List<AgendamentoResponseDTO> agendamentos = agendamentoService.listarTodos();
         return ResponseEntity.ok(agendamentos);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<AgendamentoDTO> buscarPorId(
+    public ResponseEntity<AgendamentoResponseDTO> buscarPorId(
             @PathVariable Long id) {
-        AgendamentoDTO agendamento = agendamentoService.buscarPorId(id);
+        AgendamentoResponseDTO agendamento = agendamentoService.buscarPorId(id);
         return ResponseEntity.ok(agendamento);
     }
         

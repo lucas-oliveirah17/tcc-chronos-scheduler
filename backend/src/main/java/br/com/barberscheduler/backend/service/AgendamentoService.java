@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.com.barberscheduler.backend.dto.AgendamentoDTO;
+import br.com.barberscheduler.backend.dto.AgendamentoResponseDTO;
 import br.com.barberscheduler.backend.dto.AgendamentoRequestDTO;
 import br.com.barberscheduler.backend.model.Agendamento;
 import br.com.barberscheduler.backend.model.Profissional;
@@ -42,37 +42,37 @@ public class AgendamentoService extends BaseService {
     }
         
     @Transactional(readOnly = true)
-    public List<AgendamentoDTO> listarTodos() {
+    public List<AgendamentoResponseDTO> listarTodos() {
         enableFilter(filtro);
         return agendamentoRepository.findAll()
                 .stream()
-                .map(AgendamentoDTO::new)
+                .map(AgendamentoResponseDTO::new)
                 .collect(Collectors.toList());
     }
     
     @Transactional(readOnly = true)
-    public AgendamentoDTO buscarPorId(Long id) {
+    public AgendamentoResponseDTO buscarPorId(Long id) {
         enableFilter(filtro);
         Agendamento agendamento = agendamentoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Agendamento de ID " + id + " não encontrado ou inativo."));
         
-        return new AgendamentoDTO(agendamento);
+        return new AgendamentoResponseDTO(agendamento);
     }
     
     @Transactional
-    public AgendamentoDTO criar(AgendamentoRequestDTO dto) {
+    public AgendamentoResponseDTO criar(AgendamentoRequestDTO dto) {
         disableFilter(filtro);
-        Usuario cliente = usuarioService.findEntidadeById(dto.getClienteId());
-        Profissional profissional = profissionalService.findEntidadeById(dto.getProfissionalId());
-        Servico servico = servicoService.findEntidadeById(dto.getServicoId());
+        Usuario cliente = usuarioService.findEntidadeById(dto.clienteId());
+        Profissional profissional = profissionalService.findEntidadeById(dto.profissionalId());
+        Servico servico = servicoService.findEntidadeById(dto.servicoId());
         
         if(cliente.getPerfil() != PerfilUsuario.CLIENTE) {
             throw new IllegalArgumentException(
                     "O usuário de ID " + cliente.getId() + " não tem perfil de Cliente.");
         }
         
-        LocalDateTime inicio = dto.getDataHoraInicio();
+        LocalDateTime inicio = dto.dataHoraInicio();
         LocalDateTime fim = inicio.plusMinutes(servico.getDuracaoMinutos());
         
         List<Agendamento> conflitos = agendamentoRepository.findOverlappingAppointments(
@@ -93,7 +93,7 @@ public class AgendamentoService extends BaseService {
         
         Agendamento agendamentoSalvo = agendamentoRepository.save(novoAgendamento);
         
-        return new AgendamentoDTO(agendamentoSalvo);
+        return new AgendamentoResponseDTO(agendamentoSalvo);
     }
     
     @Transactional
