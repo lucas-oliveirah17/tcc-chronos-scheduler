@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import br.com.barberscheduler.backend.dto.ProfissionalDTO;
+import br.com.barberscheduler.backend.dto.ProfissionalResponseDTO;
 import br.com.barberscheduler.backend.dto.ProfissionalRequestDTO;
 import br.com.barberscheduler.backend.service.ProfissionalService;
 
@@ -28,30 +28,30 @@ public class ProfissionalController {
     }
     
     @PostMapping
-    public ResponseEntity<ProfissionalDTO> criar(
+    public ResponseEntity<ProfissionalResponseDTO> criar(
             @RequestBody ProfissionalRequestDTO dto) {
-        ProfissionalDTO profissionalCriado = profissionalService.criar(dto);
+        ProfissionalResponseDTO profissionalCriado = profissionalService.criar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(profissionalCriado);
     }
     
     @GetMapping
-    public ResponseEntity<List<ProfissionalDTO>> listarTodos() {
-        List<ProfissionalDTO> profissionais = profissionalService.listarTodos();
+    public ResponseEntity<List<ProfissionalResponseDTO>> listarTodos() {
+        List<ProfissionalResponseDTO> profissionais = profissionalService.listarTodos();
         return ResponseEntity.ok(profissionais);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<ProfissionalDTO> buscarPorId(
+    public ResponseEntity<ProfissionalResponseDTO> buscarPorId(
             @PathVariable Long id) {
-        ProfissionalDTO profissional = profissionalService.buscarPorId(id);
+        ProfissionalResponseDTO profissional = profissionalService.buscarPorId(id);
         return ResponseEntity.ok(profissional);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<ProfissionalDTO> atualizar(
+    public ResponseEntity<ProfissionalResponseDTO> atualizar(
             @PathVariable Long id,
             @RequestBody ProfissionalRequestDTO dto) {
-        ProfissionalDTO profissionalAtualizado = profissionalService.atualizar(id, dto);
+        ProfissionalResponseDTO profissionalAtualizado = profissionalService.atualizar(id, dto);
         return ResponseEntity.ok(profissionalAtualizado);
     }
     

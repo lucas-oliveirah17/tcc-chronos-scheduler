@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.com.barberscheduler.backend.dto.ProfissionalDTO;
+import br.com.barberscheduler.backend.dto.ProfissionalResponseDTO;
 import br.com.barberscheduler.backend.dto.ProfissionalRequestDTO;
 import br.com.barberscheduler.backend.model.Profissional;
 import br.com.barberscheduler.backend.model.Usuario;
@@ -42,73 +42,73 @@ public class ProfissionalService extends BaseService {
     // ou seja, se uma das consultas falharem, ele faz o rollback de todas as alterações
     // que fez nesta tentativa.
     @Transactional(readOnly = true)
-    public List<ProfissionalDTO> listarTodos() {
+    public List<ProfissionalResponseDTO> listarTodos() {
         enableFilter(filtro);
         return profissionalRepository.findAll()
                 .stream()
-                .map(ProfissionalDTO::new)
+                .map(ProfissionalResponseDTO::new)
                 .collect(Collectors.toList());
     }
     
     @Transactional(readOnly = true)
-    public ProfissionalDTO buscarPorId(Long id) {
+    public ProfissionalResponseDTO buscarPorId(Long id) {
         enableFilter(filtro);
         Profissional profissional = profissionalRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Profissional de ID " + id + " não encontrado ou inativo."));
         
-        return new ProfissionalDTO(profissional);
+        return new ProfissionalResponseDTO(profissional);
     }
     
     @Transactional
-    public ProfissionalDTO criar(ProfissionalRequestDTO dto) {
+    public ProfissionalResponseDTO criar(ProfissionalRequestDTO dto) {
         disableFilter(filtro);
-        if(dto.getUsuarioId() == null) {
+        if(dto.usuarioId() == null) {
             throw new IllegalArgumentException(
                     "O ID do usuário é obrigatório para criar um profissional.");
         }
         
-        Usuario usuarioAssociado = usuarioService.findEntidadeById(dto.getUsuarioId());
+        Usuario usuarioAssociado = usuarioService.findEntidadeById(dto.usuarioId());
         
         if(usuarioAssociado.getPerfil() != PerfilUsuario.PROFISSIONAL) {
             throw new IllegalArgumentException(
-                    "O usuário de ID " + dto.getUsuarioId() + " não tem perfil de Profissional.");
+                    "O usuário de ID " + dto.usuarioId() + " não tem perfil de Profissional.");
         }
         
-        if(profissionalRepository.existsByUsuarioIdRegardlessOfStatus(dto.getUsuarioId())) {
+        if(profissionalRepository.existsByUsuarioIdRegardlessOfStatus(dto.usuarioId())) {
             throw new IllegalArgumentException(
-                    "O usuário de ID " + dto.getUsuarioId() + " já está associado a outro profissional.");
+                    "O usuário de ID " + dto.usuarioId() + " já está associado a outro profissional.");
         }
         
         Profissional novoProfissional = new Profissional();
-        novoProfissional.setEspecialidades(dto.getEspecialidades());
+        novoProfissional.setEspecialidades(dto.especialidades());
         novoProfissional.setUsuario(usuarioAssociado);
         
         Profissional profissionalSalvo = profissionalRepository.save(novoProfissional);
         
-        return new ProfissionalDTO(profissionalSalvo);
+        return new ProfissionalResponseDTO(profissionalSalvo);
     }
     
     @Transactional
-    public ProfissionalDTO atualizar(Long id, ProfissionalRequestDTO dto) {
+    public ProfissionalResponseDTO atualizar(Long id, ProfissionalRequestDTO dto) {
         Profissional profissionalExistente = findEntidadeById(id);
         
-        if(dto.getEspecialidades() != null) {
-            profissionalExistente.setEspecialidades(dto.getEspecialidades());
+        if(dto.especialidades() != null) {
+            profissionalExistente.setEspecialidades(dto.especialidades());
         }
         
-        if(dto.getUsuarioId() != null &&
-                !dto.getUsuarioId().equals(profissionalExistente.getUsuario().getId())) {
-            Usuario novoUsuario = usuarioService.findEntidadeById(dto.getUsuarioId());
+        if(dto.usuarioId() != null &&
+                !dto.usuarioId().equals(profissionalExistente.getUsuario().getId())) {
+            Usuario novoUsuario = usuarioService.findEntidadeById(dto.usuarioId());
             
             if(novoUsuario.getPerfil() != PerfilUsuario.PROFISSIONAL) {
                 throw new IllegalArgumentException(
-                        "O novo usuário de ID " + dto.getUsuarioId() + " não tem perfil de Profissional.");
+                        "O novo usuário de ID " + dto.usuarioId() + " não tem perfil de Profissional.");
             }
             
-            if(profissionalRepository.existsByUsuarioIdRegardlessOfStatus(dto.getUsuarioId())) {
+            if(profissionalRepository.existsByUsuarioIdRegardlessOfStatus(dto.usuarioId())) {
                 throw new IllegalArgumentException(
-                        "O novo usuário de ID " + dto.getUsuarioId() + " já está associado a outro profissional."); 
+                        "O novo usuário de ID " + dto.usuarioId() + " já está associado a outro profissional."); 
             }
             
             profissionalExistente.setUsuario(novoUsuario);
@@ -117,7 +117,7 @@ public class ProfissionalService extends BaseService {
         
         Profissional profissionalAtualizado = profissionalRepository.save(profissionalExistente);
         
-        return new ProfissionalDTO(profissionalAtualizado);
+        return new ProfissionalResponseDTO(profissionalAtualizado);
     }
     
     @Transactional
