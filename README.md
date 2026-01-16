@@ -178,7 +178,8 @@ Ao utilizar o comando `./chronos dev`, o utilitário gerencia automaticamente a 
 
 O utilitário gera automaticamente o arquivo `backend/src/main/resources/application-local.properties` baseando-se nos valores definidos no seu `.env` da raiz.
 
-> **Nota:** Os arquivos `.example` presentes no repositório servem apenas como referência técnica da estrutura necessária. O uso do utilitário dispensa a configuração manual destes arquivos.
+> [!NOTE]
+> Os arquivos `.example` presentes no repositório servem apenas como referência técnica da estrutura necessária. O uso do utilitário dispensa a configuração manual destes arquivos.
 
 #### B) Rodar o Back-end via Eclipse (Java/Spring):
 
