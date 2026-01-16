@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.com.barberscheduler.backend.dto.ServicoDTO;
+import br.com.barberscheduler.backend.dto.ServicoResponseDTO;
 import br.com.barberscheduler.backend.dto.ServicoRequestDTO;
 import br.com.barberscheduler.backend.model.Servico;
 import br.com.barberscheduler.backend.repository.ServicoRepository;
@@ -35,72 +35,72 @@ public class ServicoService extends BaseService {
     }
     
     @Transactional(readOnly = true)
-    public List<ServicoDTO> listarTodos() {
+    public List<ServicoResponseDTO> listarTodos() {
         enableFilter(filtro);
         return servicoRepository.findAll()
                 .stream()
-                .map(ServicoDTO::new)
+                .map(ServicoResponseDTO::new)
                 .collect(Collectors.toList());
     }
     
     @Transactional(readOnly = true)
-    public ServicoDTO buscarPorId(Long id) {
+    public ServicoResponseDTO buscarPorId(Long id) {
         enableFilter(filtro);
         Servico servico = servicoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Serviço de ID " + id + " não encontrado ou inativo."));
         
-        return new ServicoDTO(servico);
+        return new ServicoResponseDTO(servico);
     }
     
     @Transactional
-    public ServicoDTO criar(ServicoRequestDTO dto) { 
+    public ServicoResponseDTO criar(ServicoRequestDTO dto) { 
         disableFilter(filtro);
-        if(servicoRepository.existsByNomeRegardlessOfStatus(dto.getNome())) {
+        if(servicoRepository.existsByNomeRegardlessOfStatus(dto.nome())) {
             throw new IllegalArgumentException(
-                    "O serviço " + dto.getNome() + " já está cadastrado.");
+                    "O serviço " + dto.nome() + " já está cadastrado.");
         }
         
         Servico novoServico = new Servico();
-        novoServico.setNome(dto.getNome());
-        novoServico.setDescricao(dto.getDescricao());
-        novoServico.setDuracaoMinutos(dto.getDuracaoMinutos());
-        novoServico.setPreco(dto.getPreco());
+        novoServico.setNome(dto.nome());
+        novoServico.setDescricao(dto.descricao());
+        novoServico.setDuracaoMinutos(dto.duracaoMinutos());
+        novoServico.setPreco(dto.preco());
         
         Servico servicoSalvo = servicoRepository.save(novoServico);
         
-        return new ServicoDTO(servicoSalvo);
+        return new ServicoResponseDTO(servicoSalvo);
     }
     
     @Transactional
-    public ServicoDTO atualizar(Long id, ServicoRequestDTO dto) {
+    public ServicoResponseDTO atualizar(Long id, ServicoRequestDTO dto) {
         Servico servicoExistente = findEntidadeById(id);
            
-        if(dto.getNome() != null && 
-                !dto.getNome().equals(servicoExistente.getNome())) {
-            servicoRepository.findByNomeRegardlessOfStatus(dto.getNome())
+        if(dto.nome() != null && 
+                !dto.nome().equals(servicoExistente.getNome())) {
+            servicoRepository.findByNomeRegardlessOfStatus(dto.nome())
                 .ifPresent(_ -> {
                     throw new IllegalArgumentException(
-                            "O nome de serviço " + dto.getNome() + " já está cadastrado.");
+                            "O nome de serviço " + dto.nome() + " já está cadastrado.");
                     });
-            servicoExistente.setNome(dto.getNome());
+            servicoExistente.setNome(dto.nome());
         }
         
-        if(dto.getDescricao() != null) {
-            servicoExistente.setDescricao(dto.getDescricao());
+        if(dto.descricao() != null) {
+            servicoExistente.setDescricao(dto.descricao());
         }
         
-        if(dto.getDuracaoMinutos() != null) {
-            servicoExistente.setDuracaoMinutos(dto.getDuracaoMinutos());
+        if(dto.duracaoMinutos() != null) {
+            servicoExistente.setDuracaoMinutos(dto.duracaoMinutos());
         }
         
-        if(dto.getPreco() != null) {
-            servicoExistente.setPreco(dto.getPreco());
+        if(dto.preco() != null) {
+            servicoExistente.setPreco(dto.preco());
         }
         
         Servico servicoAtualizado = servicoRepository.save(servicoExistente);
         
-        return new ServicoDTO(servicoAtualizado);
+        return new ServicoResponseDTO(servicoAtualizado);
     }
     
     @Transactional

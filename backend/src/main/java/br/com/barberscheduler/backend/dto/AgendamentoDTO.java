@@ -11,7 +11,7 @@ public class AgendamentoDTO {
     private Long id;
     private UsuarioDTO cliente;
     private ProfissionalDTO profissional;
-    private ServicoDTO servico;
+    private ServicoResponseDTO servico;
     private LocalDateTime dataHoraInicio;
     private LocalDateTime dataHoraFim;
     private StatusAgendamento status;
@@ -25,7 +25,7 @@ public class AgendamentoDTO {
         this.id = agendamento.getId();
         this.cliente = new UsuarioDTO(agendamento.getCliente());
         this.profissional = new ProfissionalDTO(agendamento.getProfissional());
-        this.servico = new ServicoDTO(agendamento.getServico());
+        this.servico = new ServicoResponseDTO(agendamento.getServico());
         this.dataHoraInicio = agendamento.getDataHoraInicio();
         this.dataHoraFim = agendamento.getDataHoraFim();
         this.status = agendamento.getStatus();
@@ -57,11 +57,11 @@ public class AgendamentoDTO {
         this.profissional = profissional;
     }
 
-    public ServicoDTO getServico() {
+    public ServicoResponseDTO getServico() {
         return servico;
     }
 
-    public void setServico(ServicoDTO servico) {
+    public void setServico(ServicoResponseDTO servico) {
         this.servico = servico;
     }
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import br.com.barberscheduler.backend.dto.ServicoDTO;
+import br.com.barberscheduler.backend.dto.ServicoResponseDTO;
 import br.com.barberscheduler.backend.dto.ServicoRequestDTO;
 import br.com.barberscheduler.backend.service.ServicoService;
 
@@ -28,33 +28,33 @@ public class ServicoController {
     }
     
     @PostMapping
-    public ResponseEntity<ServicoDTO> criar(
+    public ResponseEntity<ServicoResponseDTO> criar(
             @RequestBody ServicoRequestDTO dto) {
-        ServicoDTO servicoCriado = servicoService.criar(dto);
+        ServicoResponseDTO servicoCriado = servicoService.criar(dto);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(servicoCriado);
     }
     
     @GetMapping
-    public ResponseEntity<List<ServicoDTO>> listarTodos() {
-        List<ServicoDTO> servicos = servicoService.listarTodos();
+    public ResponseEntity<List<ServicoResponseDTO>> listarTodos() {
+        List<ServicoResponseDTO> servicos = servicoService.listarTodos();
         
         return ResponseEntity.ok(servicos);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<ServicoDTO> buscarPorId(
+    public ResponseEntity<ServicoResponseDTO> buscarPorId(
             @PathVariable Long id) {
-        ServicoDTO servico = servicoService.buscarPorId(id);
+        ServicoResponseDTO servico = servicoService.buscarPorId(id);
         
         return ResponseEntity.ok(servico);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<ServicoDTO> atualizar(
+    public ResponseEntity<ServicoResponseDTO> atualizar(
             @PathVariable Long id, 
             @RequestBody ServicoRequestDTO dto) {
-        ServicoDTO servicoAtualizado = servicoService.atualizar(id, dto);
+        ServicoResponseDTO servicoAtualizado = servicoService.atualizar(id, dto);
         
         return ResponseEntity.ok(servicoAtualizado);
     }
