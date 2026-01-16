@@ -96,6 +96,38 @@ show_help() {
     echo -e "${CYAN}==============================================================${NC}"
 }
 
+# Função para sincronizar variáveis com o application-local.properties do Backend
+sync_backend_properties() {
+    local PROPERTIES_FILE="backend/src/main/resources/application-local.properties"
+    
+    echo -e "${CYAN}>>> [SYNC] Atualizando application-local.properties...${NC}"
+    
+    mkdir -p "$(dirname "$PROPERTIES_FILE")"
+
+    cat <<EOF > "$PROPERTIES_FILE"
+# ARQUIVO GERADO AUTOMATICAMENTE PELO SCRIPT CHRONOS
+# DATA: $(date)
+
+server.port=${BACK_PORT}
+
+#Conexão com o Banco do Docker
+spring.datasource.url=jdbc:postgresql://localhost:${DB_PORT}/${DB_NAME}
+spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASS}
+
+# JWT
+# Pode ser gerado no bash, via: openssl rand-base64 32
+jwt.secret=${JWT_SECRET}
+jwt.expiration.hours=${JWT_EXPIRATION_HOURS}
+
+# Configurações de desenvolvimento
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+EOF
+
+    echo -e "${GREEN}>>> [SYNC] Arquivo de propriedades sincronizado com sucesso!${NC}"
+}
+
 case "$1" in
     start|-s)
     echo -e "${GREEN}>>> [START] Iniciando ambiente Chronos...${NC}"
@@ -107,9 +139,13 @@ case "$1" in
     echo -e "${MAGENTA}>>> [DEV MODE] Preparando infraestrutura para desenvolvimento...${NC}"
     # Para o backend explicitamente caso ele esteja rodando no Docker
     ${DOCKER_CMD} stop backend
+    
+    # chamada de função de sincronização
+    sync_backend_properties
+    
     echo -e "${YELLOW}Dica: Agora voce pode rodar o backend direto pela sua IDE.${NC}"
     # Sobe apenas os serviços listados abaixo
-    ${DOCKER_CMD} up -d --no-build db-postgres pgadmin frontend
+    ${DOCKER_CMD} up -d --no-build --no-deps db-postgres pgadmin frontend
     show_urls "--dev"
     ;;
 
