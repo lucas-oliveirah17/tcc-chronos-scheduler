@@ -7,7 +7,7 @@ public class ProfissionalDTO {
     
     private Long id;
     private String especialidades;
-    private UsuarioDTO usuario;
+    private UsuarioResponseDTO usuario;
     
     public ProfissionalDTO() {
     }
@@ -15,7 +15,7 @@ public class ProfissionalDTO {
     public ProfissionalDTO(Profissional profissional) {
         this.id = profissional.getId();
         this.especialidades = profissional.getEspecialidades();
-        this.usuario = new UsuarioDTO(profissional.getUsuario());
+        this.usuario = new UsuarioResponseDTO(profissional.getUsuario());
     }
 
     public Long getId() {
@@ -34,11 +34,11 @@ public class ProfissionalDTO {
         this.especialidades = especialidades;
     }
 
-    public UsuarioDTO getUsuario() {
+    public UsuarioResponseDTO getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(UsuarioDTO usuario) {
+    public void setUsuario(UsuarioResponseDTO usuario) {
         this.usuario = usuario;
     }
 }

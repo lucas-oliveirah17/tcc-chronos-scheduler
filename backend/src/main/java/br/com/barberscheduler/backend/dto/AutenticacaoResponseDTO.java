@@ -2,11 +2,11 @@ package br.com.barberscheduler.backend.dto;
 
 public class AutenticacaoResponseDTO {
     private String token;
-    private UsuarioDTO usuario;
+    private UsuarioResponseDTO usuario;
 
     public AutenticacaoResponseDTO(
             String token, 
-            UsuarioDTO usuario) {
+            UsuarioResponseDTO usuario) {
         this.token = token;
         this.usuario = usuario;
     }
@@ -15,7 +15,7 @@ public class AutenticacaoResponseDTO {
         return token;
     }
     
-    public UsuarioDTO getUsuario() {
+    public UsuarioResponseDTO getUsuario() {
         return usuario;
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.barberscheduler.backend.config.TokenService;
 import br.com.barberscheduler.backend.dto.AutenticacaoRequestDTO;
 import br.com.barberscheduler.backend.dto.AutenticacaoResponseDTO;
-import br.com.barberscheduler.backend.dto.UsuarioDTO;
+import br.com.barberscheduler.backend.dto.UsuarioResponseDTO;
 import br.com.barberscheduler.backend.model.Usuario;
 import br.com.barberscheduler.backend.repository.AutenticacaoRepository;
 
@@ -41,8 +41,8 @@ public class AutenticacaoController {
         
         var token = tokenService.gerarToken(usuarioAutenticado);
         
-        var usuarioDTO = new UsuarioDTO(usuarioAutenticado);
+        var usuarioResponseDTO = new UsuarioResponseDTO(usuarioAutenticado);
         
-        return ResponseEntity.ok(new AutenticacaoResponseDTO(token, usuarioDTO));
+        return ResponseEntity.ok(new AutenticacaoResponseDTO(token, usuarioResponseDTO));
     }
 }

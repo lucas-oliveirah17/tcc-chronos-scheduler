@@ -9,7 +9,7 @@ import br.com.barberscheduler.backend.model.enums.StatusAgendamento;
 public class AgendamentoDTO {
     
     private Long id;
-    private UsuarioDTO cliente;
+    private UsuarioResponseDTO cliente;
     private ProfissionalDTO profissional;
     private ServicoResponseDTO servico;
     private LocalDateTime dataHoraInicio;
@@ -23,7 +23,7 @@ public class AgendamentoDTO {
     
     public AgendamentoDTO(Agendamento agendamento) {
         this.id = agendamento.getId();
-        this.cliente = new UsuarioDTO(agendamento.getCliente());
+        this.cliente = new UsuarioResponseDTO(agendamento.getCliente());
         this.profissional = new ProfissionalDTO(agendamento.getProfissional());
         this.servico = new ServicoResponseDTO(agendamento.getServico());
         this.dataHoraInicio = agendamento.getDataHoraInicio();
@@ -41,11 +41,11 @@ public class AgendamentoDTO {
         this.id = id;
     }
 
-    public UsuarioDTO getCliente() {
+    public UsuarioResponseDTO getCliente() {
         return cliente;
     }
 
-    public void setCliente(UsuarioDTO cliente) {
+    public void setCliente(UsuarioResponseDTO cliente) {
         this.cliente = cliente;
     }
 

@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.com.barberscheduler.backend.dto.UsuarioCreateDTO;
-import br.com.barberscheduler.backend.dto.UsuarioDTO;
+import br.com.barberscheduler.backend.dto.UsuarioRequestDTO;
+import br.com.barberscheduler.backend.dto.UsuarioResponseDTO;
 import br.com.barberscheduler.backend.dto.UsuarioUpdateDTO;
 import br.com.barberscheduler.backend.model.Usuario;
 import br.com.barberscheduler.backend.repository.UsuarioRepository;
@@ -40,77 +40,77 @@ public class UsuarioService extends BaseService {
     }
     
     @Transactional(readOnly = true)
-    public List<UsuarioDTO> listarTodos() {
+    public List<UsuarioResponseDTO> listarTodos() {
         enableFilter(filtro);
         return usuarioRepository.findAll()
                 .stream()
-                .map(UsuarioDTO::new)
+                .map(UsuarioResponseDTO::new)
                 .collect(Collectors.toList());
     }
     
     @Transactional(readOnly = true)
-    public UsuarioDTO buscarPorId(Long id) {
+    public UsuarioResponseDTO buscarPorId(Long id) {
         enableFilter(filtro);
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Usuário de ID " + id + " não encontrado ou inativo."));
         
-        return new UsuarioDTO(usuario);
+        return new UsuarioResponseDTO(usuario);
     }
     
     @Transactional
-    public UsuarioDTO criar(UsuarioCreateDTO dto) {   
+    public UsuarioResponseDTO criar(UsuarioRequestDTO dto) {
         disableFilter(filtro);
-        if(usuarioRepository.existsByEmailRegardlessOfStatus(dto.getEmail())) {
+        if(usuarioRepository.existsByEmailRegardlessOfStatus(dto.email())) {
             throw new IllegalArgumentException(
-                    "O e-mail " + dto.getEmail() + " já está cadastrado.");
+                    "O e-mail " + dto.email() + " já está cadastrado.");
         }
         
         Usuario novoUsuario = new Usuario();
-        novoUsuario.setNome(dto.getNome());
-        novoUsuario.setEmail(dto.getEmail());
-        novoUsuario.setTelefone(dto.getTelefone());
-        novoUsuario.setPerfil(dto.getPerfil());
+        novoUsuario.setNome(dto.nome());
+        novoUsuario.setEmail(dto.email());
+        novoUsuario.setTelefone(dto.telefone());
+        novoUsuario.setPerfil(dto.perfil());
         
-        String senhaCriptografada = passwordEncoder.encode(dto.getSenha());       
+        String senhaCriptografada = passwordEncoder.encode(dto.senha());
         novoUsuario.setSenha(senhaCriptografada);
         
         Usuario usuarioSalvo = usuarioRepository.save(novoUsuario);
         
-        return new UsuarioDTO(usuarioSalvo);
+        return new UsuarioResponseDTO(usuarioSalvo);
     }
     
     @Transactional
-    public UsuarioDTO atualizar(Long id, UsuarioUpdateDTO dto) {
+    public UsuarioResponseDTO atualizar(Long id, UsuarioUpdateDTO dto) {
         Usuario usuarioExistente = findEntidadeById(id);
         
-        if(dto.getEmail() != null && 
-                !dto.getEmail().equals(usuarioExistente.getEmail())) {
+        if(dto.email() != null && 
+                !dto.email().equals(usuarioExistente.getEmail())) {
             
-            usuarioRepository.findByEmailRegardlessOfStatus(dto.getEmail())
+            usuarioRepository.findByEmailRegardlessOfStatus(dto.email())
                 .ifPresent(_ -> {
                     throw new IllegalArgumentException(
-                            "O e-mail " + dto.getEmail() + " já está cadastrado.");
+                            "O e-mail " + dto.email() + " já está cadastrado.");
                     });
             
-            usuarioExistente.setEmail(dto.getEmail());
+            usuarioExistente.setEmail(dto.email());
         }
         
-        if(dto.getNome() != null) {
-            usuarioExistente.setNome(dto.getNome());
+        if(dto.nome() != null) {
+            usuarioExistente.setNome(dto.nome());
         }
         
-        if(dto.getTelefone() != null) {
-            usuarioExistente.setTelefone(dto.getTelefone());
+        if(dto.telefone() != null) {
+            usuarioExistente.setTelefone(dto.telefone());
         }
         
-        if(dto.getPerfil() != null) {
-            usuarioExistente.setPerfil(dto.getPerfil());
+        if(dto.perfil() != null) {
+            usuarioExistente.setPerfil(dto.perfil());
         }
         
         Usuario usuarioAtualizado = usuarioRepository.save(usuarioExistente);
         
-        return new UsuarioDTO(usuarioAtualizado);
+        return new UsuarioResponseDTO(usuarioAtualizado);
     }
     
     @Transactional

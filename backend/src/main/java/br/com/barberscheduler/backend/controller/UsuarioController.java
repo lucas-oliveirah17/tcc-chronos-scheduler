@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import br.com.barberscheduler.backend.dto.UsuarioCreateDTO;
-import br.com.barberscheduler.backend.dto.UsuarioDTO;
+import br.com.barberscheduler.backend.dto.UsuarioRequestDTO;
+import br.com.barberscheduler.backend.dto.UsuarioResponseDTO;
 import br.com.barberscheduler.backend.dto.UsuarioUpdateDTO;
 import br.com.barberscheduler.backend.service.UsuarioService;
 
@@ -29,33 +29,33 @@ public class UsuarioController {
     }
     
     @PostMapping
-    public ResponseEntity<UsuarioDTO> criar(
-            @RequestBody UsuarioCreateDTO dto) {
-        UsuarioDTO usuarioCriado = usuarioService.criar(dto);
+    public ResponseEntity<UsuarioResponseDTO> criar(
+            @RequestBody UsuarioRequestDTO dto) {
+        UsuarioResponseDTO usuarioCriado = usuarioService.criar(dto);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCriado);
     }
     
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> listarTodos() {
-        List<UsuarioDTO> usuarios = usuarioService.listarTodos();
+    public ResponseEntity<List<UsuarioResponseDTO>> listarTodos() {
+        List<UsuarioResponseDTO> usuarios = usuarioService.listarTodos();
         
         return ResponseEntity.ok(usuarios); 
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> buscarPorId(
+    public ResponseEntity<UsuarioResponseDTO> buscarPorId(
             @PathVariable Long id) {
-        UsuarioDTO usuario = usuarioService.buscarPorId(id);
+        UsuarioResponseDTO usuario = usuarioService.buscarPorId(id);
         
         return ResponseEntity.ok(usuario);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> atualizar(
+    public ResponseEntity<UsuarioResponseDTO> atualizar(
             @PathVariable Long id, 
             @RequestBody UsuarioUpdateDTO dto) {
-        UsuarioDTO usuarioAtualizado = usuarioService.atualizar(id, dto);
+        UsuarioResponseDTO usuarioAtualizado = usuarioService.atualizar(id, dto);
         
         return ResponseEntity.ok(usuarioAtualizado);
     }
