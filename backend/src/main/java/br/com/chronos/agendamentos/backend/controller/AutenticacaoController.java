@@ -14,10 +14,12 @@ import br.com.chronos.agendamentos.backend.dto.AutenticacaoResponseDTO;
 import br.com.chronos.agendamentos.backend.dto.UsuarioResponseDTO;
 import br.com.chronos.agendamentos.backend.model.Usuario;
 import br.com.chronos.agendamentos.backend.repository.AutenticacaoRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 
 @RestController
 @RequestMapping("api/auth")
+@Tag(name = "autenticacao")
 public class AutenticacaoController {
 
     private final AuthenticationManager authenticationManager;

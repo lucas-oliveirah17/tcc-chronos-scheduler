@@ -11,15 +11,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.chronos.agendamentos.backend.config.SecurityConfig;
 import br.com.chronos.agendamentos.backend.dto.UsuarioRequestDTO;
 import br.com.chronos.agendamentos.backend.dto.UsuarioResponseDTO;
 import br.com.chronos.agendamentos.backend.dto.UsuarioUpdateRequestDTO;
 import br.com.chronos.agendamentos.backend.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@Tag(name = "usuarios")
+@SecurityRequirement(name = SecurityConfig.SECURITY)
 public class UsuarioController {
     
     private final UsuarioService usuarioService;
@@ -29,6 +36,9 @@ public class UsuarioController {
     }
     
     @PostMapping
+    @Operation(summary = "Cria um Usuário", description = "Método para criar um Usuário")
+    @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso")
+    @ApiResponse(responseCode = "500", description = "Erro no servidor")
     public ResponseEntity<UsuarioResponseDTO> criar(
             @RequestBody UsuarioRequestDTO dto) {
         UsuarioResponseDTO usuarioCriado = usuarioService.criar(dto);

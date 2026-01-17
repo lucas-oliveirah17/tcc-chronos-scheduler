@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.chronos.agendamentos.backend.dto.ServicoRequestDTO;
 import br.com.chronos.agendamentos.backend.dto.ServicoResponseDTO;
 import br.com.chronos.agendamentos.backend.service.ServicoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/servicos")
+@Tag(name = "servicos")
 public class ServicoController {
     
     private final ServicoService servicoService;

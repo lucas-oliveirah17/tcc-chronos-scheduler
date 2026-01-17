@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.chronos.agendamentos.backend.dto.ProfissionalRequestDTO;
 import br.com.chronos.agendamentos.backend.dto.ProfissionalResponseDTO;
 import br.com.chronos.agendamentos.backend.service.ProfissionalService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/profissionais")
+@Tag(name = "profissionais")
 public class ProfissionalController {
     
     private final ProfissionalService profissionalService;

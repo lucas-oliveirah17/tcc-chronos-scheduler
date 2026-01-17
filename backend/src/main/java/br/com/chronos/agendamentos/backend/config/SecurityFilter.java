@@ -32,7 +32,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             HttpServletResponse response, 
             FilterChain filterChain)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
         var token = this.recuperarToken(request);
         
         if(token != null) {
