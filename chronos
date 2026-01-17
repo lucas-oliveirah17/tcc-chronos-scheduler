@@ -35,8 +35,8 @@ is_running() {
 
 # Função para exibir URLs úteis
 show_urls() {
-    # Argumento $1: pode ser "--all" ou "--dev"
-    local MODE=$1
+    local MODE=$1 # "--all" ou "--dev"
+    local SHOW_REPO=$2 # '--url'
 
     if [ -z "$FRONT_PORT" ] || [ -z "$BACK_PORT" ] || [ -z "$BASE_URL" ]; then
         echo -e "\n${YELLOW}AVISO: Variáveis de ambiente não carregadas. Verifique o seu arquivo .env!${NC}"
@@ -49,7 +49,7 @@ show_urls() {
             LINKS_CONTENT="${LINKS_CONTENT}${CYAN}Frontend:${NC} ${LINK_FRONT}\n"
         fi
 
-        if is_running "chronos-backend" && [ "$MODE" == "--all" ]; then
+        if is_running "chronos-backend" || [ "$MODE" == "--all" ]; then
             LINK_BACK="${BLUE}\e]8;;${BASE_URL}\a${BASE_URL}\e]8;;\a${NC}"
             LINK_SWAGGER="${BLUE}\e]8;;http://localhost:${BACK_PORT}/swagger-ui.html\ahttp://localhost:${BACK_PORT}/swagger-ui.html\e]8;;\a${NC}"
             LINKS_CONTENT="${LINKS_CONTENT}${CYAN}Backend: ${NC} ${LINK_BACK}\n"
@@ -65,7 +65,14 @@ show_urls() {
             echo -e "\n${WHITE}--- LINKS ÚTEIS ---${NC}"
             echo -e "${WHITE}DICA: Segure ${YELLOW}Ctrl${WHITE} e clique no link para abrir no navegador.${NC}"
             printf "$LINKS_CONTENT"
-            echo -e "${CYAN}==============================================================${NC}"
+            echo -e "${CYAN}=====================================================================${NC}"
+        fi
+
+        if [ "$SHOW_REPO" == "--url" ]; then
+            REPO_URL="https://github.com/lucas-oliveirah17/tcc-chronos-scheduler"
+            LINK_REPO="${BLUE}\e]8;;${REPO_URL}\a${REPO_URL}\e]8;;\a${NC}"
+            echo -e "${CYAN}GitHub:  ${NC} ${LINK_REPO}"
+            echo -e "${CYAN}=====================================================================${NC}"
         fi
     fi
 }
@@ -83,15 +90,16 @@ show_help() {
     echo -e "  ${YELLOW}-r, restart${NC}    - Recompila e reinicia apenas o Backend"
 
     echo -e "\n${WHITE}--- DIAGNÓSTICO E INSPEÇÃO ---${NC}"
-    echo -e "  ${CYAN}-st, status${NC}     - Lista containers ativos e portas"
+    echo -e "  ${CYAN}-st, status${NC}    - Lista containers ativos e portas"
     echo -e "  ${CYAN}-l, logs${NC}       - Exibe logs em tempo real (Ctrl+C p/ sair)"
-    echo -e "  ${CYAN}-db, database${NC}   - Abre o terminal SQL (psql) do Postgres"
+    echo -e "  ${CYAN}-db, database${NC}  - Abre o terminal SQL (psql) do Postgres"
 
     echo -e "\n${WHITE}--- MANUTENÇÃO E LIMPEZA ---${NC}"
-    echo -e "  ${RED}-rb, rebuild${NC}    - Força reconstrução das imagens (sem cache)"
+    echo -e "  ${RED}-rb, rebuild${NC}   - Força reconstrução das imagens (sem cache)"
     echo -e "  ${RED}-c, clean${NC}      - RESET TOTAL: Remove containers e apaga o banco"
 
     echo -e "\n${WHITE}--- OUTROS ---${NC}"
+    echo -e "  ${GREEN}-u, url${NC}        - Exibe todos os links úteis do projeto"
     echo -e "  ${GREEN}-h, help${NC}       - Mostra esta tela de ajuda"
     echo -e "${CYAN}==============================================================${NC}"
 }
@@ -189,6 +197,10 @@ case "$1" in
     ${DOCKER_CMD} down -v
     ;;
     
+    url|-u)
+    show_urls "--all" "--url"
+    ;;
+
     help|--help|-h)
     show_help
     ;;
